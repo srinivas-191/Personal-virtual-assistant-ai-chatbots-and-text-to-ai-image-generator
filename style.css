@@ -1,222 +1,100 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
-
-
-
     *{
-
         margin: 0;
-
         padding: 0;
-
         box-sizing: border-box;
-
         font-family:"Rajdhani",'Gill Sans','Gill Sans MT',Calibri,'Trebuchet',sans-serif;
-
    }
-
-
-
-
-
         button {
-
             background-color: #f39c12; /* Bright orange color */
-
             color: white;
-
             border: none;
-
             padding: 15px 32px;
-
             text-align: center;
-
             text-decoration: none;
-
             display: inline-block;
-
             font-size: 16px;
-
             cursor: pointer;
-
             border-radius: 8px;
-
         }
-
-
-
-        .buttons {
-
+        .buttons{
             position: absolute;
-
             top: 10px;
-
             right: 150px;
-
             display: flex;
-
             flex-direction: column;
-
             gap: 10px; /* Space between buttons */
-
         }
-
-
 
         html,
-
         body{
-
             height: 100%;
-
             width: 100%;
-
             overflow: hidden;
-
-            
-
         }
-
-
-
         body {
-
             width: 100vw;
-
             height: 100vh;
-
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
             color: white;
-
-            background-image: url('./Leonardo_Phoenix_A_visually_captivating_hightech_background_fo_3.jpeg');
-
+            background-image: none;
             background-size: cover;
-
             background-position: center;
-
             background-repeat: no-repeat;
-
             position: relative;
-
             overflow: hidden;
-
             background-color: rgb(8, 30, 92);
-
         }
-
         #app {
-
             height: 100%;
-
             width: 100%;
-
             display: flex;
-
             flex-direction: column;
-
         }
-
-
-
 .container {
-
     padding: 40px;
-
     position: absolute;
-
     top: 50%;
-
     left: 50%;
-
     transform: translate(-80%, -50%); /* Shifted more to the left */
-
     background-color: rgba(0, 0, 0, 0.6);
-
     border-radius: 10px;
-
     width: 40%;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     flex-direction: column;
-
     margin-bottom: 20px;
-
 }
-
-
-
         h1 {
-
             font-size: 35px;
-
             font-family: "Roboto";
-
         }
-
-
-
         p {
-
             color: orange;
-
             font-size: 18px;
-
         }
-
-
-
         .btn {
-
             margin-top: 20px;
-
             padding: 10px 20px;
-
             font-size: 1.2em;
-
             cursor: pointer;
-
             color: #fff;
-
             background-color: #4CAF50;
-
             border: none;
-
             border-radius: 5px;
-
             transition: background-color 0.2s;
-
         }
-
-
-
         .btn:hover {
-
             background-color: #45a049;
-
         }
-
-
-
         .listening {
-
             animation: pulse 1s infinite;
-
             background-color: #FF6347;
-
         }
-
-
 table { 
     width: 80%; 
     margin: auto; 
@@ -226,895 +104,1110 @@ th, td {
     border: 1px solid black;
     padding: 8px; 
 }
-#commandInput, #urlInput, #answerInput{
+#urlInput, #answerInput{
+    margin: 10px; 
+    padding: 10px; 
+    font-size: 16px; 
+    width: 90%;
+}
+
+.commandInput {
     margin: 10px; 
     padding: 10px; 
     font-size: 16px; 
 }
- 
 
+.command-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
 
-        @keyframes pulse {
+.commandInput {
+    flex: 1;
+    height: 35px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#commandListContainer {
+    max-height: 250px; /* Set desired height */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    border: 1px solid #ccc; /* Optional: for better visibility */
+    margin: 10px auto; /* Center the container */
+    width: 90%; /* Adjust width as needed */
+}
 
-            0% {
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-                transform: scale(1);
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
 
-            }
+th {
+    background-color: #006633;
+    position: sticky;
+    top: 0;
+}
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 20px;
+        transform: translate(-50%, -50%);
+    }
+    h1 {
+        font-size: 28px;
+    }
+    .buttons {
+        top: 5px;
+        right: 20px;
+        flex-direction: row;
+        gap: 5px;
+    }
+    button {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    table {
+        width: 100%;
+        font-size: 14px;
+    }
+    th, td {
+        padding: 6px;
+    }
+    .command-btn {
+        width: 35px;
+        height: 30px;
+        font-size: 16px;
+    }
+    .commandInput {
+        font-size: 14px;
+    }
+}
 
-
-
-            50% {
-
-                transform: scale(1.1);
-
-            }
-
-
-
-            100% {
-
-                transform: scale(1);
-
-            }
-
-        }
-
-
-
-
+@media (max-width: 440px) {
+    h1 {
+        font-size: 24px;
+    }
+    .container {
+        width: 95%;
+        top: 525px;
+    }
+    .buttons {
+        flex-direction: column;
+        right: 10px;
+    }
+    table {
+        font-size: 12px;
+    }
+    th, td {
+        padding: 5px;
+    }
+    .command-btn {
+        width: 30px;
+        height: 25px;
+        font-size: 14px;
+    }
+    .commandInput {
+        font-size: 12px;
+    }
+}
 
 .chat-container{
-
     width: 100%;
-
     height: calc(100vh - 80px); /* Full viewport height minus prompt area */
-
     background-color: rgb(45, 52, 59);
-
     padding: 20px;
-
     display: flex;
-
     flex-direction: column;
-
     gap:20px;
-
     font-size: 20px;
-
     overflow: auto;
-
 }
-
 .user-chat-box{
-
     width: 60%;
-
     position: relative;
-
     left:40%;
-
 }
-
 .ai-chat-box{
-
     width: 60%;
-
     position: relative;
-
+    display: inline-block;
+    margin-left: -2%;
 }
-
-.user-chat-area{
-
-    width: 90%;
-
-    padding: 20px;
-
-    background-color: black;
-
-    color:rgba(255, 255, 255, 0.639);
-
-    border-radius: 40px 0px 40px 40px;
-
-    box-shadow: 2px 2px 10px black;
-
+.speech-controls {
     display: flex;
-
-    gap:10px;
-
-    flex-direction: column;
-
-}
-
-.chooseimg{
-
-    width: 30%;
-
-    border-radius: 30px;
-
-}
-
-.ai-chat-area{
-
-    width: 90%;
-
-    padding: 20px;
-
-    background-color: rgba(0, 0, 0, 0.361);
-
-    position: relative;
-
-    left:10%;
-
-    color:rgba(255, 255, 255, 0.639);
-
-    border-radius: 0px 40px 40px 40px;
-
-    box-shadow: 2px 2px 10px black;
-
-}
-
-#userImage{
-
-    position: absolute;
-
-    right: 0;
-
-    filter:drop-shadow( 2px 2px 10px black);
-
-
-
-}
-
-#aiImage{
-
-    position: absolute;
-
-left:0;
-
-filter:drop-shadow( 2px 2px 10px black);
-
-}
-
-.prompt-area{
-
-    width: 100%;
-
-    height: 80%;
-
-    background-color: rgb(45, 52, 59);
-
-    display: flex;
-
     align-items: center;
-
-    justify-content: center;
-
-    gap:10px
-
+    gap: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-top: 10px;
 }
 
-.prompt-area input{
-
-    width: 70%;
-
-    height: 50px;
-
+.control-btn {
+    padding: 8px 12px;
+    border: none;
     background-color: black;
-
-    outline: none;
-
-    border:none;
-
-    border-radius: 25px;
-
-    padding: 10px 20px;
-
     color: white;
-
+    cursor: pointer;
     font-size: 16px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
 
+.control-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.seek-container {
+    flex-grow: 1;
+}
+
+.seek-bar {
+    width: 100%;
+    cursor: pointer;
+}
+
+.speed-control {
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.user-chat-area{
+    width: 90%;
+    padding: 20px;
+    background-color: black;
+    color:rgba(255, 255, 255, 0.639);
+    border-radius: 40px 0px 40px 40px;
     box-shadow: 2px 2px 10px black;
+    display: flex;
+    gap:10px;
+    flex-direction: column;
+}
+.chooseimg{
+    width: 30%;
+    border-radius: 30px;
+}
+.ai-chat-area{
+    width: 80%;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.361);
+    position: relative;
+    left:10%;
+    color:rgba(255, 255, 255, 0.639);
+    border-radius: 0px 40px 40px 40px;
+    box-shadow: 2px 2px 10px black;
+}
+#userImage{
+    position: absolute;
+    right: 0;
+    filter:drop-shadow( 2px 2px 10px black);
+}
+#aiImage{
+    position: absolute;
+    left: 10px;
+    filter:drop-shadow( 2px 2px 10px black);
+}
+.prompt-area{
+    width: 100%;
+    height: 80%;
+    background-color: rgb(45, 52, 59);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.prompt-area input{
+    width: 90%;
+    height: 50px;
+    background-color: black;
+    outline: none;
+    border:none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    box-shadow: 2px 2px 10px black;
+    margin-bottom: -70px;
+}
 
+.button-group {
+    display: flex;
+    gap: 20px; /* Space between buttons */
+    margin-top: 80px;
 }
 
 .prompt-area button{
     width: 50px;
-
     height: 50px;
-
     border-radius: 50%;
-
     background-color: black;
-
     border:none;
-
     box-shadow: 2px 2px 10px black;
-
     cursor: pointer;
-
     transition: all 0.5s;
-
-    color: white;
-
 }
-
 .prompt-area button:hover{
-
     background-color: rgba(0, 0, 0, 0.338);
-
 }
 .load{
-
     filter:drop-shadow( 2px 2px 10px black)
-
 }
-
 .choose{
-
     width: 50px;
-
     height: 50px;
-
     border-radius: 50%;
-
 }
+/* Styles for image action buttons with small and impressive symbols */
 
-#image{
-
+.image-actions {
     display: flex;
-
-    align-items: center;
-
     justify-content: center;
-
+    gap: 10px;
+    margin-top: 10px;
 }
+
+.image-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 8px;
+    font-size: 12px;
+    border: none;
+    border-radius: 3px;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.image-actions button:hover {
+    background-color: #1a2ad0;
+}
+
+.image-actions button::before {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    margin-right: 3px;
+}
+
+.preview-btn::before {
+    content: '\1F441'; /* Eye symbol for preview */
+}
+
+.download-btn::before {
+    content: '\2B07'; /* Down arrow symbol for download */
+}
+
+.share-btn::before {
+    content: '\1F517'; /* Link symbol for share */
+}
+
+/* Optional: Adjust for smaller screens */
+@media (max-width: 600px) {
+    .image-actions button {
+        font-size: 10px;
+        padding: 4px 6px;
+    }
+}
+
 
 @media (max-width:600px) {
-
     .user-chat-box{
-
         width: 80%;
-
         left:20%
-
     }
-
     .ai-chat-box{
-
         width: 80%;
-
+    }
+    .page-two-buttons{
+        right: 10px; /* Moves buttons closer for small screens */
+        top: 5px; /* Adjusts top position */
+        flex-direction: row; /* Changes direction to row */
+        gap: 5px; /* Reduces space between buttons */
+        width: auto; /* Adjusts width */
+        align-items: center; /* Centers items vertically */
+    }
+    .ai-chat-box {
+        width: 100%;
+    }
+    .ai-chat-box:first-child {
+        margin-top: 90px; /* Adds space between first ai-chat-box and page-two-buttons */
+    }
+}
+.bottom-link, .current-info-bottom-link{
+    position: fixed;         
+    bottom: 3px;            
+    left: 50%;              
+    transform: translateX(-50%); 
+    font-size: 18px;         
+    text-decoration: none;   
+    color: #3308f5;         
+    background-color: #f39c12; 
+    padding: 10px 20px;      
+    border-radius: 5px;      
+    box-shadow: 2px 2px 10px rgba(230, 226, 226, 0.2);
+    transition: all 0.3s;    
+    white-space: nowrap;
+    width: auto;
+    display: inline block;
+}
+.bottom-link:hover, .current-info-bottom-link:hover{
+    background-color: #e67e22; 
+    color: white;               
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3); 
+}
+.bottom-link:focus, .current-info-bottom-link:focus {
+    outline: none;             
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.8); 
+}
+.page-two-buttons {
+    width: 350px;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between buttons */
+    align-items: flex-end;
+}
+.page-two-buttons button {
+    align-self: stretch; /* Ensures all buttons take the same width */
+}
+@media (max-width: 450px) {
+    .buttons {
+        right: 20px; /* Moves buttons closer for small screens */
+        gap: 5px; /* Reduces space between buttons */
     }
 
-    
-
+    .buttons button {
+        padding: 10px 20px; /* Smaller padding */
+        font-size: 14px; /* Reduce font size */
+        border-radius: 5px; /* Adjust border-radius */
+    }
+    .page-two-buttons{
+        right: 10px; /* Moves buttons closer for small screens */
+        top: 5px; /* Adjusts top position */
+        flex-direction: row; /* Changes direction to row */
+        gap: 5px; /* Reduces space between buttons */
+        width: auto; /* Adjusts width */
+        align-items: center; /* Centers items vertically */
+    }
+    .ai-chat-box{
+        width: 100%;
+    }
+    .ai-chat-box:first-child{
+        margin-top: 60px; /* Adds space between ai-chat-box and page-two-buttons */
+    }
+    .button-group{
+        gap: 10px;
+        margin-top: 50px;
+    }
+    .prompt-area input{
+        margin-bottom: -50px;
+    }
+    .bottom-link, .current-info-bottom-link{
+        width: 85%;
+        left: 45%;
+    }
+    .current-info-bottom-link{
+        width: 65%;
+    }
 }
-
-
-.bottom-link {
-
-    position: fixed;         
-
-    bottom: 50px;            
-
-    left: 50%;              
-
-    transform: translateX(-50%); 
-
-    font-size: 18px;         
-
-    text-decoration: none;   
-
-    color: #3308f5;         
-
-    background-color: #f39c12; 
-
-    padding: 10px 20px;      
-
-    border-radius: 5px;      
-
-    box-shadow: 2px 2px 10px rgba(230, 226, 226, 0.2);
-
-    transition: all 0.3s;    
-
-}
-
-
-
-.bottom-link:hover {
-
-    background-color: #e67e22; 
-
-    color: white;               
-
-    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3); 
-
-}
-
-
-
-.bottom-link:focus {
-
-    outline: none;             
-
-    box-shadow: 0 0 10px rgba(52, 152, 219, 0.8); 
-
-}
-
-
 
 .text-to-image-container{
-
     width: 100vw;
-
     height: 100vh;
-
     background: linear-gradient( to top,rgba(4, 160, 177, 0.11) , rgba(240, 188, 240, 0.692));
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     flex-direction: column;
-
     box-shadow: 2px 2px 10px rgb(4, 160, 177) , -2px -2px 10px rgb(240, 188, 240);
-
     border: none;
-
     border-radius: 30px;
-
     padding: 10px;
-
     box-sizing: border-box;
-
     gap: 20px;
-
 }
-
 h1{
-
     font-size: 40px;
-
     text-shadow: 2px 2px 10px rgb(4, 160, 177) ;
-
 }
-
 .input{
-
     width: 90%;
-
     height: 30%;
-
     background: linear-gradient(to right ,  rgb(3, 19, 22) , rgb(160, 161, 235));
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-around;
-
     flex-direction: column;
-
     color: aliceblue;
-
     font-size: 25px;
-
     border-radius: 20px;
-
 }
-
 #input{
-
-    width: 70%;
-
-    height: 40px;
-
-    background-color:  rgba(10, 46, 49, 0.68);
-
-    border: none;
-
-    border-radius: 20px;
-
-    box-shadow: 2px 2px 10px rgb(4, 160, 177) , -2px -2px 10px rgb(240, 188, 240);
-
-    font-size: 20px;
-
-    color: aliceblue;
-
-    padding: 15px;
-
-    box-sizing: border-box;
-
-}
-
-#gbtn{
-
-    width: 200px;
-
-    height: 50px;
-
-    background-color:  rgba(10, 46, 49, 0.68);
-
-    border: none;
-
-    border-radius: 20px;
-
-    font-size: 20px;
-
-    color: aliceblue;
-
-    box-shadow: 2px 2px 10px rgb(4, 160, 177);
-
-    transition: all 0.3s;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 5px;
-
-    cursor: pointer;
-
-
-
-}
-
-#gbtn:hover{
-
-    background: transparent;
-
-}
-
-
-
-.output{
-
     width: 90%;
-
+    margin-left: 50px;
+    height: 40px;
+    background-color:  rgba(10, 46, 49, 0.68);
+    border: none;
+    border-radius: 20px;
+    box-shadow: 2px 2px 10px rgb(4, 160, 177) , -2px -2px 10px rgb(240, 188, 240);
+    font-size: 20px;
+    color: aliceblue;
+    padding: 15px;
+    box-sizing: border-box;
+}
+#gbtn{
+    width: 200px;
+    height: 50px;
+    background-color:  rgba(10, 46, 49, 0.68);
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    color: aliceblue;
+    box-shadow: 2px 2px 10px rgb(4, 160, 177);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+}
+#gbtn:hover{
+    background: transparent;
+}
+.output{
+    width: 90%;
     height: 55%;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-around;
-
-    
-
 }
-
 .gimage{
-
     width: 70%;
-
     height: 100%;
-
     background: linear-gradient(to right ,  rgb(3, 19, 22) , rgb(160, 161, 235));
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     border: none;
-
     border-radius: 20px;
-
     position: relative;
-
 }
-
 .dbtns{
-
     width: 25%;
-
     height: 100%;
-
     background: linear-gradient(to right ,  rgb(3, 19, 22) , rgb(160, 161, 235));
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     border: none;
-
     border-radius: 20px;
-
     flex-direction: column;
-
     gap: 90px;
-
-
-
-
-
 }
-
 #download{
-
     width: 150px;
-
     height: 50px;
-
     background-color:  rgba(10, 46, 49, 0.68);
-
     border: none;
-
     border-radius: 20px;
-
     font-size: 20px;
-
     color: aliceblue;
-
     box-shadow: 2px 2px 10px rgb(4, 160, 177);
-
     transition: all 0.3s;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 5px;
-
     cursor: pointer;
-
-
-
 }
-
 #reset{
-
     width: 150px;
-
     height: 50px;
-
     background-color:  rgba(10, 46, 49, 0.68);
-
     border: none;
-
     border-radius: 20px;
-
     font-size: 20px;
-
     color: aliceblue;
-
     box-shadow: 2px 2px 10px rgb(4, 160, 177);
-
     transition: all 0.3s;
-
     display: flex;
-
     align-items: center;
-
     cursor: pointer;
-
     justify-content: center;
-
     gap: 5px;
-
-
-
 }
-
 #download:hover{
-
     background: transparent;
-
 }
-
 #reset:hover{
-
     background: transparent;
-
 }
-
 #gimage{
-
     width: 65%;
-
     height: 90%;
-
     background-size: cover;
-
     border: none;
-
     border-radius: 20px;
-
     display: none;
-
 }
-
 #loading{
-
     position: absolute;
-
     width: 10%;
-
     filter:drop-shadow(2px 2px 10px black) ;
-
     display: none;
-
 }
-
 @media (max-width : 1200px) {
-
-    .text-to-image-container{
-
-        width: 90%;
-
-    }
-
-    
-
-    
-
-}
-
-@media (max-width : 900px){
-
-
-
-
-
-.text-to-image-ontainer{
-
-    flex-direction: column;
-
-}
-
-#gimage {
-
-    width: 50%;
-
-}
-
-.gimage {
-
-    width: 100%;
-
-    height: 64%;}
-
-
-
-    .btns{
-
+    .text-to-image-container {
         width: 100%;
-
-    height: 25%; 
-
-    flex-direction: row;
-
+        height: 100%;
+        border-radius: 0;
+        padding: 5px;
+        gap: 10px;
+        margin-top: 10vh; /* Moves it down by 10% of the viewport height */
     }
-
-    .output{
-
+    #lgt-btn {
+        left: -330px;       /* Slightly moved right to prevent cutting */
+        margin-top: -10px;
+        z-index: 9999;/* Ensures it stays on top */
+        background: orange; /* Visible background */
+        display: flex;
         flex-direction: column;
-
+        width: 98px;
+        height: 92%;
+    }
+    .buttons {
+        flex-direction: row;
+        gap: 5px;
+        width: auto;
+        align-items: center;
+    }
+    
+    .input {
+        width: 100%;
+        font-size: 14px;
+        padding: 5px;
     }
 
-}
-
-
-
-@media (max-width : 570px){
-
-
-
-    h1 {
-
-        font-size: 30px;
-
+    #input {
+        width: 100%;
+        font-size: 12px;
+        height: 35px;
+        padding: 10px;
+        margin-left: 3px;
+    }
+    #third-page-mic-icon {
+        left: 980px;
     }
 
-    .input{
-
-        font-size: 20px;
-
+    #gbtn {
+        width: 140px;
+        height: 35px;
+        font-size: 14px;
+        gap: 3px;
     }
 
-    #input{
+    /* Increased output height */
+    .output {
+        flex-direction: column;
+        width: 100%;
+        height: 70vh; /* Adjusted for better spacing */
+        gap: 15px;
+        margin-top: -30px;
+    }
 
-        font-size: 15px;
-
+    /* Ensure image container takes more space */
+    .gimage {
+        width: 90%;
+        height: 65%; /* Adjusted for better image visibility */
+        padding: 10px;
     }
 
     #gimage {
-
-        width: 60%;
-
-      }
-
-}
-
-@media (max-width : 450px){
-
-
-
-    .text-to-image-container{
-
-        width: 100%;
-
-        height: 100%;
-
-        border-radius: 0px;
-
+        width: 85%;
+        max-height: 300px; /* Increased image height */
     }
 
-    h1 {
+    /* Adjust button container to be more accessible */
+    .dbtns {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        margin-top: -70px;
+    }
 
-        font-size: 22px;
+    #download, #reset {
+        width: 120px;
+        height: 30px;
+        font-size: 14px;
+    }
 
-      }
-
-      .input {
-
-        font-size: 15px;
-
-      }
-
-      #input {
-
-        width: 90%;
-
-        font-size:12px ;
-
-      }
-
-      #gbtn {
-
-        width: 150px;
-
-        height: 35px;
-
-        font-size: 15px;
-
+    #loading {
+        width: 15%;
+    }
 }
-
-.dbtns{
-
-    justify-content: space-around;
-
-    gap: 0px;
-
-}
-
-#download {
-
-    width: 110px;
-
-    height: 35px;
-
-    font-size: 15px;
-
-}
-
-#reset {
-
-    width: 110px;
-
-    height: 35px;
-
-    font-size: 15px;
-
-}
-
-#gimage {
-
-    width: 85%;
-
-  }
-
-}
-
-.signup-container,.login-container,.logout-container,.forgot-password-container,.reset-password-container { 
-
-    width: 300px; 
-
-    margin: 50px auto; 
-
-    padding: 20px; 
-
-    border: 1px solid #ccc; 
-
-}
-
-#signup-username,#signup-email,#signup-password,#signup-confirm-password,#login-username,#login-password,#logout-username,#logout-password,#forgot-email,#reset-token,#new-password,#confirm-new-password { 
-
-    width: 100%; 
-
-    padding: 10px; 
-
-    margin: 10px 0; 
-
-}
-
-.signup-button,.login-button,.logout-button,.forgot-password-button,.reset-password-button{ 
-
-    width: 100%; 
-
-    padding: 10px; 
-
-    background-color: #4CAF50; color: white; border: none; 
-
-}
-
-#voice-input {
-
-    width: 100%; 
-
-    padding: 10px; 
-
-    background-color: #4CAF50; color: white; border: none; 
-
-}
-
-.link{
-
-    color: #2575fc;
-
-    cursor: pointer;
-
-    text-decoration: underline;
-
-}
-
-#lgt-btn{
-
-    position: absolute;
-
-    bottom: -450px;
-
-    right: 130px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 10px; /* Space between buttons */
-
+@media (max-width : 900px){
+    .text-to-image-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        padding: 5px;
+        gap: 10px;
+        margin-top: 10vh; /* Moves it down by 10% of the viewport height */
+    }
+    #lgt-btn {
+        left: -170px;       /* Slightly moved right to prevent cutting */
+        margin-top: -10px;
+        z-index: 9999;/* Ensures it stays on top */
+        background: orange; /* Visible background */
+        display: flex;
+        flex-direction: column;
+        width: 98px;
+        height: 92%;
+    }
+    .buttons {
+        flex-direction: row;
+        gap: 5px;
+        width: auto;
+        align-items: center;
+    }
     
+    .input {
+        width: 100%;
+        font-size: 14px;
+        padding: 5px;
+    }
 
+    #input {
+        width: 100%;
+        font-size: 12px;
+        height: 35px;
+        padding: 10px;
+        margin-left: 3px;
+    }
+    #third-page-mic-icon {
+        left: 850px;
+    }
+
+    #gbtn {
+        width: 140px;
+        height: 35px;
+        font-size: 14px;
+        gap: 3px;
+    }
+
+    /* Increased output height */
+    .output {
+        flex-direction: column;
+        width: 100%;
+        height: 70vh; /* Adjusted for better spacing */
+        gap: 15px;
+        margin-top: -30px;
+    }
+
+    /* Ensure image container takes more space */
+    .gimage {
+        width: 90%;
+        height: 65%; /* Adjusted for better image visibility */
+        padding: 10px;
+    }
+
+    #gimage {
+        width: 85%;
+        max-height: 300px; /* Increased image height */
+    }
+
+    /* Adjust button container to be more accessible */
+    .dbtns {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        margin-top: -70px;
+    }
+
+    #download, #reset {
+        width: 120px;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    #loading {
+        width: 15%;
+    }
+}
+@media (max-width : 769px){
+    .text-to-image-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        padding: 5px;
+        gap: 10px;
+        margin-top: 10vh; /* Moves it down by 10% of the viewport height */
+    }
+    #lgt-btn {
+        left: -290px;       /* Slightly moved right to prevent cutting */
+        margin-top: -10px;
+        z-index: 9999;/* Ensures it stays on top */
+        background: orange; /* Visible background */
+        display: flex;
+        flex-direction: column;
+        width: 90px;
+        height: 95%;
+    }
+    
+    .input {
+        width: 100%;
+        font-size: 14px;
+        padding: 5px;
+    }
+
+    #input {
+        width: 100%;
+        font-size: 12px;
+        height: 35px;
+        padding: 10px;
+        margin-left: 3px;
+    }
+    #third-page-mic-icon {
+        left: 700px;
+    }
+
+    #gbtn {
+        width: 140px;
+        height: 35px;
+        font-size: 14px;
+        gap: 3px;
+    }
+
+    /* Increased output height */
+    .output {
+        flex-direction: column;
+        width: 100%;
+        height: 90vh; /* Adjusted for better spacing */
+        gap: 15px;
+        margin-top: -30px;
+    }
+
+    /* Ensure image container takes more space */
+    .gimage {
+        width: 90%;
+        height: 65%; /* Adjusted for better image visibility */
+        padding: 10px;
+    }
+
+    #gimage {
+        width: 85%;
+        max-height: 300px; /* Increased image height */
+    }
+
+    /* Adjust button container to be more accessible */
+    .dbtns {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        margin-top: -70px;
+    }
+
+    #download, #reset {
+        width: 120px;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    #loading {
+        width: 15%;
+    }
+}
+@media (max-width : 700px){
+    .text-to-image-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        padding: 5px;
+        gap: 10px;
+        margin-top: 10vh; /* Moves it down by 10% of the viewport height */
+    }
+    #lgt-btn {
+        left: -130px;       /* Slightly moved right to prevent cutting */
+        margin-top: -10px;
+        z-index: 9999;/* Ensures it stays on top */
+        background: orange; /* Visible background */
+        display: flex;
+        flex-direction: column;
+        width: 90px;
+        height: 95%;
+    }
+    
+    .input {
+        width: 100%;
+        font-size: 14px;
+        padding: 5px;
+    }
+
+    #input {
+        width: 100%;
+        font-size: 12px;
+        height: 35px;
+        padding: 10px;
+    }
+
+    #third-page-mic-icon {
+        left: 700px;
+    }
+
+    #gbtn {
+        width: 140px;
+        height: 35px;
+        font-size: 14px;
+        gap: 3px;
+    }
+
+    /* Increased output height */
+    .output {
+        flex-direction: column;
+        width: 100%;
+        height: 70vh; /* Adjusted for better spacing */
+        gap: 15px;
+        margin-top: -30px;
+    }
+
+    /* Ensure image container takes more space */
+    .gimage {
+        width: 90%;
+        height: 65%; /* Adjusted for better image visibility */
+        padding: 10px;
+    }
+
+    #gimage {
+        width: 85%;
+        max-height: 300px; /* Increased image height */
+    }
+
+    /* Adjust button container to be more accessible */
+    .dbtns {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        margin-top: -70px;
+    }
+
+    #download, #reset {
+        width: 120px;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    #loading {
+        width: 15%;
+    }
+}
+@media (max-width : 600px){
+    .text-to-image-container{
+        margin-top: 10vh;
+    }
+    #third-page-mic-icon {
+        left: 530px;
+    }
+}
+@media (max-width : 550px){
+    .text-to-image-container{
+        margin-top: 10vh;
+    }
+    #third-page-mic-icon {
+        left: 430px;
+    }
+    #lgt-btn {
+        left: -110px;
+        margin-top: -10px;
+        z-index: 9999;
+        background: orange;
+        display: flex;
+        flex-direction: column;
+        width: 90px;
+        height: 95%;
+    }
 }
 
-.password-field {
-
+@media (max-width : 400px){
+    .input{
+        height: 25%;
+    }
+    #third-page-mic-icon {
+        left: 330px;
+    }
+    .output{
+        height: 50%;
+    }
+    .dbtns{
+        margin-bottom: -40px;
+    }
+}
+.signup-container,.login-container,.logout-container,.forgot-password-container,.reset-password-container { 
+    max-width: 600px; 
+    width: 100%;
+    max-height: 80vh; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin: 50px auto; 
+    padding: 20px; 
+    border: 1px solid #ccc; 
+}
+#signup-username,#signup-email,#signup-password,#signup-confirm-password,#security-question,#security-answer,#login-username,#login-password,#logout-username,#logout-password,#forgot-email,#reset-token,#new-password,#confirm-new-password { 
+    width: 100%; 
+    padding: 10px; 
+    margin: 10px 0; 
+}
+.input-container {
     position: relative;
-
-    display: flex;
-
-    align-items: center;
-
+    width: 100%;
 }
 
-.password-field input {
-
-    flex: 1;
-
-    padding-right: 2rem;
-
-}
-
-.password-field .toggle-password {
-
+.mic-icon {
     position: absolute;
-
-    right: -1.5rem;
-
-    background: none;
-
-    border: none;
-
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px; /* Adjust size */
+    height: 20px;
+    background-color: white; /* Optional: Match input background */
+    border-radius: 50%; /* Makes it round */
+    padding: 3px;
     cursor: pointer;
-
+}
+#third-page-mic-icon {
+    right: 150px;
+}
+.signup-button,.login-button,.logout-button,.forgot-password-button,.reset-password-button{ 
+    width: 100%; 
+    padding: 10px; 
+    background-color: #4CAF50; color: white; border: none; 
+}
+#voice-input {
+    width: 100%; 
+    padding: 10px; 
+    background-color: #4CAF50; color: white; border: none; 
+}
+.link{
+    color: #2575fc;
+    cursor: pointer;
+    text-decoration: underline;
+}
+#lgt-btn{
+    position: absolute;
+    top: 10px;
+    right: 1250px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between buttons */
+    
+}
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.password-field input {
+    flex: 1;
+    padding-right: 2rem;
+}
+.password-field .toggle-password {
+    position: absolute;
+    right: -1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
     font-size: 1.2rem;
+}
+@media (max-width: 768px) {
+    .signup-container, .login-container, .logout-container, .forgot-password-container, .reset-password-container {
+        width: 90%; /* Adjusted width for better fit */
+        margin: 30px auto;
+        padding: 15px;
+    }
+    #signup-username, #signup-email, #signup-password, #signup-confirm-password, #security-question,#security-answer,
+    #login-username, #login-password, #logout-username, #logout-password,
+    #forgot-email, #reset-token, #new-password, #confirm-new-password {
+        font-size: 14px;
+        padding: 8px;
+    }
+    .signup-button, .login-button, .logout-button, .forgot-password-button, .reset-password-button {
+        font-size: 14px;
+        padding: 8px;
+    }
+    #voice-input {
+        font-size: 14px;
+        padding: 8px;
+    }
+    .password-field .toggle-password {
+        right: -1rem; /* Adjusted for smaller screens */
+        font-size: 1rem;
+    }
+    #lgt-btn {
+        bottom: -400px;
+        right: 50px;
+    }
+}
 
-  }
+@media (max-width: 480px) {
+    .signup-container, .login-container, .logout-container, .forgot-password-container, .reset-password-container {
+        width: 95%;
+        padding: 12px;
+    }
+    #signup-username, #signup-email, #signup-password, #signup-confirm-password, #security-question,#security-answer,
+    #login-username, #login-password, #logout-username, #logout-password,
+    #forgot-email, #reset-token, #new-password, #confirm-new-password {
+        font-size: 12px;
+        padding: 6px;
+    }
+    .signup-button, .login-button, .logout-button, .forgot-password-button, .reset-password-button {
+        font-size: 12px;
+        padding: 6px;
+    }
+    #voice-input {
+        font-size: 12px;
+        padding: 6px;
+    }
+    .password-field .toggle-password {
+        right: 1.5rem; /* Further adjustment */
+        font-size: 0.9rem;
+    }
+    #lgt-btn {
+        bottom: -350px;
+        right: 20px;
+    }
+}
