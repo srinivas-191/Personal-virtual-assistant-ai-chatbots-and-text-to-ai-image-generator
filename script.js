@@ -6,24 +6,44 @@ function showSignUpPage() {
         <h2>Create Account</h2>
         <form id="signup-form">
             <label for="signup-username">Username:</label>
+    <div class="input-container">
             <input type="text" id="signup-username" placeholder="Username" required>
+                 <img src="microphone.svg" alt="Mic" class="mic-icon mic-username">
+        </div>
             <label for="signup-email">E-mail(secret email which is known only to you): </label>
+     <div class="input-container">
             <input type="email" id="signup-email" placeholder="Secret Email which is known only by you" required>
+      <img src="microphone.svg" alt="Mic" class="mic-icon mic-email">
+        </div>
+    <label for="signup-password">Password:</label>
             <div class="password-field">
+    <div class="input-container">
             <input type="password" id="signup-password" placeholder="password" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-password">
+        </div>
             <button type="button" class="toggle-password" data-target="signup-password">👁️</button>
-            </div>
+           </div>
+    <label for="signup-confirm-password">Confirm Password:</label>
             <div class="password-field">
+    <div class="input-container">
             <input type="password" id="signup-confirm-password" placeholder="confirm-Password" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-confirm-password">
+        </div>
             <button type="button" class="toggle-password" data-target="signup-confirm-password">👁️</button>
-            </div>
+        </div>
             <label for="security-question">Security Question:</label>
-            <input type="text" id="security-question" placeholder="security question" required><br><br>
-            <div class="password-field">
-            <label for="security-answer">Answer:</label>
-            <input type="password" id="security-answer" placeholder="Answer" required>
-            <button type="button" class="toggle-password" data-target="security-answer">👁️</button>
-            </div><br><br>
+     <div class="input-container">
+            <input type="text" id="security-question" placeholder="security question" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-security-question">
+        </div>
+    <label for="security-answer">Answer:</label>
+    <div class="password-field">
+    <div class="input-container">
+            <input type="password" id="security-answer" placeholder="password" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-security-answer">
+    </div>
+    <button type="button" class="toggle-password" data-target="security-answer">👁️</button>
+    </div><br>
             <button type="submit" class="signup-button">Sign Up</button> <br><br>
             <button type="button" id="voice-input">🎤 Speak</button> <!-- Voice input button -->
             <p id="voice-status">Press the button to start the signup process via voice.</p>
@@ -31,9 +51,80 @@ function showSignUpPage() {
         <br>
         <p>Already have an account? <a class="link" onclick="showLoginPage()">Login</a></p>
     </div>`
+    
 initSignUpForm();
 initVoiceInputForSignUp();
-initPasswordToggle(); 
+initPasswordToggle();
+    initAllMicButtons();
+}
+function initMicForField(fieldId, micClass, promptMessage) {
+    const micButton = document.querySelector(micClass);
+    const inputField = document.getElementById(fieldId);
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Voice input is not supported on your browser.");
+        micButton.style.display = "none"; // Hide mic button if not supported
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    micButton.addEventListener("click", () => {
+        micButton.src = "microphone2.svg"; // Change mic image to active state
+        speak(promptMessage, () => {
+            recognition.start();
+        });
+    });
+
+    recognition.onresult = (event) => {
+        let transcript = event.results[0][0].transcript.trim();
+
+        // Special formatting for email input
+        if (fieldId === "signup-email") {
+            transcript = transcript
+                .replace(/at the rate of/g, "@")
+                .replace(/dot/g, ".")
+                .replace(/underscore/g, "_")
+                .replace(/dash/g, "-")
+                .replace(/\s+/g, "");
+        }
+
+        inputField.value = transcript.toLowerCase();
+    };
+
+    recognition.onend = () => {
+        micButton.src = "microphone.svg"; // Revert mic image after speech ends
+    };
+
+    recognition.onerror = (event) => {
+        alert(`Error: ${event.error}`);
+        micButton.src = "microphone.svg"; // Ensure image resets on error
+    };
+}
+
+// Function to speak a message and execute a callback after speaking
+function speak(message, callback) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(message);
+
+    utterance.onend = () => {
+        if (callback) callback(); // Start recognition after speech ends
+    };
+
+    synth.speak(utterance);
+}
+
+// Initialize mic buttons for all fields
+function initAllMicButtons() {
+    initMicForField("signup-username", ".mic-username", "Please say your username.");
+    initMicForField("signup-email", ".mic-email", "Please say your email address.");
+    initMicForField("signup-password", ".mic-password", "Please say your password.");
+    initMicForField("signup-confirm-password", ".mic-confirm-password", "Please confirm your password.");
+    initMicForField("security-question", ".mic-security-question", "Please say your security question.");
+    initMicForField("security-answer", ".mic-security-answer", "Please say your security answer.");
 }
 function initPasswordToggle() {
     document.querySelectorAll('.toggle-password').forEach(button => {
@@ -108,11 +199,19 @@ function showLoginPage() {
     <div class="login-container">
         <h2>Login</h2>
         <form id="login-form">
-            <input type="text" id="login-username" placeholder="username" required><br>
+    <label for="login-username">Username:</label>
+    <div class="input-container">
+            <input type="text" id="login-username" placeholder="username" required>
+     <img src="microphone.svg" alt="Mic" class="mic-icon mic-login-username">
+        </div>
+    <label for="login-password">Password:</label>
             <div class="password-field">
+    <div class="input-container">
             <input type="password" id="login-password" placeholder="Password" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-login-password">
+        </div>
             <button type="button" class="toggle-password" data-target="login-password">👁️</button>
-            </div><br>
+            </div>
             <p>Forgot your password? <a class="link" id="reset-password-link" onclick="showForgotPasswordPage()">Reset it here</a></p>
             <br>
             <button type="submit" class="login-button">Login</button><br><br>
@@ -122,10 +221,65 @@ function showLoginPage() {
         <p>Don't have an account? <a class="link" onclick="showSignUpPage()">Sign Up</a></p>
     </div>
 `
+    initLoginMicButtons();
 initLoginPage();
 initVoiceInputForLogin();
 initPasswordToggle();
 document.getElementById('reset-password-link').addEventListener('click', showForgotPasswordPage);
+}
+function initMicForLoginField(fieldId, micClass, promptMessage) {
+    const micButton = document.querySelector(micClass);
+    const inputField = document.getElementById(fieldId);
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Voice input is not supported on your browser.");
+        micButton.style.display = "none"; // Hide mic button if not supported
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    micButton.addEventListener("click", () => {
+        micButton.src = "microphone2.svg"; // Change mic image to active state
+        speak(promptMessage, () => {
+            recognition.start();
+        });
+    });
+
+    recognition.onresult = (event) => {
+        let transcript = event.results[0][0].transcript.trim();
+        inputField.value = transcript;
+    };
+
+    recognition.onend = () => {
+        micButton.src = "microphone.svg"; // Revert mic image after speech ends
+    };
+
+    recognition.onerror = (event) => {
+        alert(`Error: ${event.error}`);
+        micButton.src = "microphone.svg"; // Ensure image resets on error
+    };
+}
+
+// Function to speak a message and execute a callback after speaking
+function speak(message, callback) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(message);
+
+    utterance.onend = () => {
+        if (callback) callback(); // Start recognition after speech ends
+    };
+
+    synth.speak(utterance);
+}
+
+// Initialize mic buttons for login fields
+function initLoginMicButtons() {
+    initMicForLoginField("login-username", ".mic-login-username", "Please say your username.");
+    initMicForLoginField("login-password", ".mic-login-password", "Please say your password.");
 }
 function initLoginPage(){
     document.getElementById('login-form').addEventListener('submit', function(event) {
@@ -151,14 +305,22 @@ function initLoginPage(){
 }
 function showLogOutPage() {
     document.body.style.backgroundImage = "none"; // Add background
+    document.body.style.backgroundColor = "rgb(8, 30, 92)"; // Add background
     app.innerHTML = `
     <!-- Logout Page -->
 <div class="logout-container" id="logout-container">
   <h1>Confirm Logout</h1>
   <form id="logout-form">
+    <label for="logout-username">Username:</label>
+    <div class="input-container">
     <input type="text" id="logout-username" placeholder="Enter Username" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-logout-username">
+    </div>
     <div class="password-field">
+    <div class="input-container">
     <input type="password" id="logout-password" placeholder="Enter Password" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-logout-password">
+    </div>
     <button type="button" class="toggle-password" data-target="logout-password">👁️</button>
     </div>
     <button type="submit" class="logout-button">Logout</button><br><br>
@@ -168,11 +330,65 @@ function showLogOutPage() {
   <p>Cancel logout? <span class="link" onclick="showPage3()">Back to previous page</span></p>
 </div>
     `;
+    initLogoutMicButtons();
     initLogoutPage();
     initVoiceInputForLogout();
     initPasswordToggle();
 }
+function initMicForLogoutField(fieldId, micClass, promptMessage) {
+    const micButton = document.querySelector(micClass);
+    const inputField = document.getElementById(fieldId);
 
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Voice input is not supported on your browser.");
+        micButton.style.display = "none"; // Hide mic button if not supported
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    micButton.addEventListener("click", () => {
+        micButton.src = "microphone2.svg"; // Change mic image to active state
+        speak(promptMessage, () => {
+            recognition.start();
+        });
+    });
+
+    recognition.onresult = (event) => {
+        let transcript = event.results[0][0].transcript.trim();
+        inputField.value = transcript;
+    };
+
+    recognition.onend = () => {
+        micButton.src = "microphone.svg"; // Revert mic image after speech ends
+    };
+
+    recognition.onerror = (event) => {
+        alert(`Error: ${event.error}`);
+        micButton.src = "microphone.svg"; // Ensure image resets on error
+    };
+}
+
+// Function to speak a message and execute a callback after speaking
+function speak(message, callback) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(message);
+
+    utterance.onend = () => {
+        if (callback) callback(); // Start recognition after speech ends
+    };
+
+    synth.speak(utterance);
+}
+
+// Initialize mic buttons for logout fields
+function initLogoutMicButtons() {
+    initMicForLogoutField("logout-username", ".mic-logout-username", "Please say your username.");
+    initMicForLogoutField("logout-password", ".mic-logout-password", "Please say your password.");
+}
 function initLogoutPage(){
     document.getElementById('logout-container').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -199,7 +415,9 @@ function initLogoutPage(){
 }
 
 function showPage1() {
-    document.body.style.backgroundImage = "url('./Leonardo_Phoenix_A_visually_captivating_hightech_background_fo_3.jpeg')"; // Add background
+    document.body.style.backgroundImage = "url('Leonardo_Phoenix_A_visually_captivating_hightech_background_fo_3.jpg')"; // Add background
+    document.body.style.backgroundPosition = "center";
+    document.body.style.backgroundRepeat = "no-repeat";
     app.innerHTML = `
         <div class="container">
             <h1>Your AI Assistant</h1>
@@ -233,25 +451,36 @@ btn.addEventListener("click", function () {
 
   function handleCommand(command) {
     let savedCommands = JSON.parse(localStorage.getItem("customCommands")) || {};
+    let found = false;
 
-    if (savedCommands[command]) {
-        if (savedCommands[command].url) {
-            speak(`Opening ${command.replace("open ", "")}...`);
-            window.open(savedCommands[command].url, "_blank");
-        } else if (savedCommands[command].answer) {
-            speak(savedCommands[command].answer);
-        }
-    } 
-    else if (command.startsWith("search for")) {
-        const searchQuery = command.replace("search for", "").trim();
-        if (searchQuery) {
-            speak(`Searching Google for ${searchQuery}`);
-            window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, "_blank");
+    // Loop through saved commands to find if any command group contains the spoken command
+    for (let key in savedCommands) {
+        let commandArray = key.split(", ").map(cmd => cmd.trim().toLowerCase()); // Convert to array
+
+        if (commandArray.includes(command.toLowerCase())) {
+            found = true;
+            if (savedCommands[key].url) {
+                speak(`Opening ${command.replace("open ", "")}...`);
+                window.open(savedCommands[key].url, "_blank");
+            } else if (savedCommands[key].answer) {
+                speak(savedCommands[key].answer);
+            }
+            break;
         }
     }
-    else {
-        speak(`I don't recognize this command. Searching Google...`);
-        window.open(`https://www.google.com/search?q=${encodeURIComponent(command)}`, "_blank");
+
+    // If command is not found, check if it's a search command
+    if (!found) {
+        if (command.startsWith("search for")) {
+            const searchQuery = command.replace("search for", "").trim();
+            if (searchQuery) {
+                speak(`Searching Google for ${searchQuery}`);
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, "_blank");
+            }
+        } else {
+            speak(`I don't recognize this command. Searching Google...`);
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(command)}`, "_blank");
+        }
     }
 }
     
@@ -281,74 +510,319 @@ btn.addEventListener("click", function () {
 
 }
 
+
 function showManageCommandsPage() {
-    document.body.style.backgroundImage = "url('./Leonardo_Phoenix_A_visually_captivating_hightech_background_fo_3.jpeg')" // Add background
+    document.body.style.cssText = "text-align: center; padding: 20px;";
     app.innerHTML = `
         <h1>Manage Your AI Assistant Commands</h1>
-    <div class="manage-container">
-    <input type="text" id="commandInput" placeholder="Enter command (e.g., Open GitHub)">
-    <input type="text" id="urlInput" placeholder="Enter URL (optional)">
-    <input type="text" id="answerInput" placeholder="Enter answer (optional)">
+        <div class="manage-container">
+            <div id="commandInputs">
+                <div class="command-input-container">
+                    <button class="command-btn" onclick="addCommandInput()">+</button>
+                    <input type="text" class="commandInput" placeholder="Enter command (e.g., Open GitHub)">
+                    <button class="command-btn" onclick="removeCommandInput()">-</button>
+                </div>
+            </div>
+            <input type="text" id="urlInput" placeholder="Enter URL (optional)">
+            <input type="text" id="answerInput" placeholder="Enter answer (optional)">
+        </div>
+        <button onclick="addCommand()">Add Command</button><br>
+        <button onclick="showPage1()">Back to virtual assistant chatbot page</button>
+
+        <h2>Saved Commands</h2>
+    <div id="commandListContainer">
+        <table>
+            <thead>
+                <tr><th>Command</th><th>URL</th><th>Answer</th><th>Action</th></tr>
+            </thead>
+    <tbody id="commandList"></tbody>
+        </table>
     </div>
-    <button onclick="addCommand()">Add Command</button><br>
-    <button onclick="showPage1()">Back to virtual assistant chatbot page</button>
 
-    <h2>Saved Commands</h2>
-    <table>
-        <thead>
-            <tr><th>Command</th><th>URL</th><th>Answer</th><th>Action</th></tr>
-        </thead>
-        <tbody id="commandList"></tbody>
-    </table>
+        <button onclick="clearCommands()">Clear All Commands</button>
+    `;
 
-    <button onclick="clearCommands()">Clear All Commands</button>
-
-    `
-displayCommands();
+    displayCommands();
 }
-    function addCommand() {
-            let command = document.getElementById("commandInput").value.toLowerCase().trim();
-            let url = document.getElementById("urlInput").value.trim();
-            let answer = document.getElementById("answerInput").value.trim();
+    function addCommandInput() {
+    let commandInputs = document.getElementById("commandInputs");
 
-            if (!command) {
-                alert("Command is required!");
-                return;
-            }
+    let newInputContainer = document.createElement("div");
+    newInputContainer.className = "command-input-container";
 
-            if (!url && !answer) {
-                alert("Either a URL or an answer must be provided!");
-                return;
-            }
+    let plusButton = document.createElement("button");
+    plusButton.innerText = "+";
+    plusButton.className = "command-btn";
+    plusButton.onclick = addCommandInput;
 
-            let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
-            commands[command] = { url: url || null, answer: answer || null };
-            localStorage.setItem("customCommands", JSON.stringify(commands));
+    let newInput = document.createElement("input");
+    newInput.type = "text";
+    newInput.className = "commandInput";
+    newInput.placeholder = "Enter another command";
 
-            document.getElementById("commandInput").value = "";
-            document.getElementById("urlInput").value = "";
-            document.getElementById("answerInput").value = "";
+    let minusButton = document.createElement("button");
+    minusButton.innerText = "-";
+    minusButton.className = "command-btn";
+    minusButton.onclick = removeCommandInput;
 
-            displayCommands();
+    newInputContainer.appendChild(plusButton);
+    newInputContainer.appendChild(newInput);
+    newInputContainer.appendChild(minusButton);
+
+    commandInputs.appendChild(newInputContainer);
+}
+
+function removeCommandInput(event) {
+    let commandInputs = document.getElementById("commandInputs");
+    let inputContainer = event.target.parentElement; // Get the parent div of the button clicked
+
+    if (commandInputs.children.length > 1) { 
+        commandInputs.removeChild(inputContainer);
+    }
+}
+
+function addCommand() {
+    let commandElements = document.getElementsByClassName("commandInput");
+    let url = document.getElementById("urlInput").value.trim();
+    let answer = document.getElementById("answerInput").value.trim();
+
+    if (!url && !answer) {
+        alert("Either a URL or an answer must be provided!");
+        return;
+    }
+
+    let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
+    let newCommands = [];
+
+    for (let input of commandElements) {
+        let command = input.value.toLowerCase().trim();
+        if (command) {
+            newCommands.push(command);
+        }
+    }
+
+    if (newCommands.length === 0) {
+        alert("At least one command must be provided!");
+        return;
+    }
+
+    // Check if any command already exists anywhere in the table
+    for (let key in commands) {
+        let existingCommands = key.split(", ").map(cmd => cmd.trim().toLowerCase());
+
+        if (newCommands.some(cmd => existingCommands.includes(cmd))) {
+            alert("One or more commands already exist in another row!");
+            return;
+        }
+    }
+
+    // Check if the URL or answer already exists
+    let matchedKey = null;
+
+    for (let key in commands) {
+        if ((commands[key].url && commands[key].url === url) || 
+            (commands[key].answer && commands[key].answer === answer)) {
+            matchedKey = key;
+            break;
+        }
+    }
+
+    if (matchedKey) {
+        // Allow adding new (non-matching) commands only within the same row
+        let existingCommands = matchedKey.split(", ").map(cmd => cmd.trim().toLowerCase());
+        let uniqueNewCommands = newCommands.filter(cmd => !existingCommands.includes(cmd));
+
+        if (uniqueNewCommands.length === 0) {
+            alert("One or more entered commands already exist in this row!");
+            return;
         }
 
-        function displayCommands() {
-            let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
-            let commandList = document.getElementById("commandList");
-            commandList.innerHTML = "";
+        let updatedKey = [...existingCommands, ...uniqueNewCommands].join(", ");
+        let tempData = commands[matchedKey];
+        delete commands[matchedKey]; // Remove old key
+        commands[updatedKey] = tempData; // Save with updated key
+    } else {
+        // If no match is found, create a new entry
+        commands[newCommands.join(", ")] = { url: url || null, answer: answer || null };
+    }
 
-            for (let key in commands) {
-                let command = key; // Preserve original case for display
-               let row = `<tr>
-                    <td>${command}</td>
-                    <td>${commands[command].url || "-"}</td>
-                    <td>${commands[command].answer || "-"}</td>
-                    <td><button onclick="deleteCommand('${command}')">Delete</button></td>
-                </tr>`;
-                commandList.innerHTML += row;
-            }
-        }
+    localStorage.setItem("customCommands", JSON.stringify(commands));
+    displayCommands();
+}
+function displayCommands() {
+    let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
+    let commandList = document.getElementById("commandList");
+    commandList.innerHTML = "";
 
+    for (let key in commands) {
+        let commandArray = key.split(", ");
+        let commandHTML = commandArray.map(command => `
+            <span class="command-item" id="command-${command}">
+                <span class="command-text">${command}</span>
+                <input type="text" class="edit-input" id="edit-${command}" value="${command}" style="display:none;">
+                <button class="edit-btn" onclick="editCommand('${command}')">🖊️</button>
+                <button class="save-btn" onclick="saveCommand('${command}', '${key}')" style="display:none;">💾</button>
+                <button class="delete-command-btn" onclick="deleteSingleCommand('${command}', '${key}')">🗑️</button>
+            </span>
+        `).join(", ");
+
+        let url = commands[key].url || "";
+        let answer = commands[key].answer || "";
+
+        let row = `<tr>
+            <td>${commandHTML}</td>
+            <td>
+                <span class="url-text" id="url-text-${key}">${url || "-"}</span>
+                <input type="text" id="edit-url-${key}" class="edit-input" value="${url}" style="display:none;">
+                <button class="edit-btn" onclick="editURL('${key}')">🖊️</button>
+                <button class="save-btn" onclick="saveURL('${key}')" style="display:none;">💾</button>
+                <button class="delete-url-btn" onclick="deleteURL('${key}')">🗑️</button>
+            </td>
+            <td>
+                <span class="answer-text" id="answer-text-${key}">${answer || "-"}</span>
+                <input type="text" id="edit-answer-${key}" class="edit-input" value="${answer}" style="display:none;">
+                <button class="edit-btn" onclick="editAnswer('${key}')">🖊️</button>
+                <button class="save-btn" onclick="saveAnswer('${key}')" style="display:none;">💾</button>
+                <button class="delete-answer-btn" onclick="deleteAnswer('${key}')">🗑️</button>
+            </td>
+            <td><button onclick="deleteCommand('${key}')">Delete</button></td>
+        </tr>`;
+
+        commandList.innerHTML += row;
+    }
+}
+
+function editCommand(command) {
+    // Use querySelector with an attribute selector for safety
+    document.querySelector(`[id="edit-${command}"]`).style.display = "inline-block";
+    document.querySelector(`#command-${CSS.escape(command)} .command-text`).style.display = "none";
+    document.querySelector(`#command-${CSS.escape(command)} .edit-btn`).style.display = "none";
+    document.querySelector(`#command-${CSS.escape(command)} .save-btn`).style.display = "inline-block";
+}
+
+function saveCommand(oldCommand, fullCommandKey) {
+    let newCommand = document.querySelector(`[id="edit-${oldCommand}"]`).value.trim();
+
+    // If no changes were made, simply refresh the edit option
+    if (newCommand === oldCommand) {
+        displayCommands(); // Refresh the table to show the edit option again
+        return;
+    }
+
+    if (!newCommand) {
+        alert("Command cannot be empty!");
+        return;
+    }
+
+    let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
+    if (!commands[fullCommandKey]) return;
+
+    let commandArray = fullCommandKey.split(", ");
+    let updatedCommands = commandArray.map(cmd => (cmd === oldCommand ? newCommand : cmd));
+
+    let updatedKey = updatedCommands.join(", ");
+    commands[updatedKey] = commands[fullCommandKey]; // Keep the same URL/Answer
+    delete commands[fullCommandKey]; // Remove old key
+
+    localStorage.setItem("customCommands", JSON.stringify(commands));
+    displayCommands(); // Refresh the table
+}
+function deleteSingleCommand(commandToDelete, fullCommandKey) {
+    let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
+    
+    if (!commands[fullCommandKey]) return;
+
+    let commandArray = fullCommandKey.split(", ");
+    let updatedCommands = commandArray.filter(cmd => cmd !== commandToDelete);
+    
+    if (updatedCommands.length === 0) {
+        // If no commands are left, delete the entire entry
+        delete commands[fullCommandKey];
+    } 
+    else {
+        // Otherwise, update the key with the remaining commands
+        let updatedKey = updatedCommands.join(", ");
+        commands[updatedKey] = commands[fullCommandKey]; // Keep the same URL/Answer
+        delete commands[fullCommandKey]; // Remove old key
+    }
+
+    localStorage.setItem("customCommands", JSON.stringify(commands));
+    displayCommands(); // Refresh the table
+}
+function editURL(commandKey) {
+    // Hide the text span and show the input field
+    document.getElementById(`url-text-${commandKey}`).style.display = "none";
+    document.getElementById(`edit-url-${commandKey}`).style.display = "inline-block";
+
+    // Find the closest edit and save buttons within the same container
+    let parentElement = document.getElementById(`edit-url-${commandKey}`).parentElement;
+    
+    parentElement.querySelector(".edit-btn").style.display = "none";  // Hide edit button
+    parentElement.querySelector(".save-btn").style.display = "inline-block";  // Show save button
+}
+
+function saveURL(commandKey) {
+    let urlInput = document.getElementById(`edit-url-${commandKey}`);
+    let newURL = urlInput.value.trim();
+
+    let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
+    if (!commands[commandKey]) return;
+
+    // If the new URL is the same as the existing one, just refresh the UI
+    if (newURL === commands[commandKey].url) {
+        displayCommands(); // Refresh UI
+        return;
+    }
+
+    commands[commandKey].url = newURL || null; // Allow empty URL
+    localStorage.setItem("customCommands", JSON.stringify(commands));
+    displayCommands();
+}
+function deleteURL(commandKey) {
+    let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
+    if (commands[commandKey]) {
+        commands[commandKey].url = null; // Remove URL only
+        localStorage.setItem("customCommands", JSON.stringify(commands));
+        displayCommands();
+    }
+}
+function editAnswer(commandKey) {
+    // Hide the text span and show the input field
+    document.getElementById(`answer-text-${commandKey}`).style.display = "none";
+    document.getElementById(`edit-answer-${commandKey}`).style.display = "inline-block";
+
+    // Find the closest edit and save buttons within the same container
+    let parentElement = document.getElementById(`edit-answer-${commandKey}`).parentElement;
+    
+    parentElement.querySelector(".edit-btn").style.display = "none";  // Hide edit button
+    parentElement.querySelector(".save-btn").style.display = "inline-block";  // Show save button
+}
+
+function saveAnswer(commandKey) {
+    let answerInput = document.getElementById(`edit-answer-${commandKey}`);
+    let newAnswer = answerInput.value.trim();
+
+    let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
+    if (!commands[commandKey]) return;
+
+    // If the new answer is the same as the existing one, just refresh the UI
+    if (newAnswer === commands[commandKey].answer) {
+        displayCommands(); // Refresh UI
+        return;
+    }
+
+    commands[commandKey].answer = newAnswer || null; // Allow empty answer
+    localStorage.setItem("customCommands", JSON.stringify(commands));
+    displayCommands();
+}
+function deleteAnswer(commandKey) {
+    let commands = JSON.parse(localStorage.getItem("customCommands")) || {};
+    if (commands[commandKey]) {
+        commands[commandKey].answer = null; // Remove answer only
+        localStorage.setItem("customCommands", JSON.stringify(commands));
+        displayCommands();
+    }
+}
         function deleteCommand(command) {
     let commands = JSON.parse(localStorage.getItem("customCommands"));
     for (let key in commands) {
@@ -369,29 +843,36 @@ displayCommands();
         window.onload = displayCommands;
 
 function showPage2() {
-    document.body.style.backgroundImage = "none";
+    document.body.style="background-color:rgb(45, 52, 59)";
     app.innerHTML = `
     <div class="chat-container" style="width: 100%; height: calc(100vh - 80px);">
     <div class="ai-chat-box"> 
     <img src="ai.png" alt="" id="aiImage" width="10%">
-    <div class="ai-chat-area"> Hello! How Can I Help you Today? </div> 
+    <div class="ai-chat-area"> Hello ! I am here to provide user friendly chats , limited info and identifying images to my ability...
+    How Can I Help you Today? </div> 
     </div> 
     </div>
-    <div class="prompt-area"> 
-    <input type="text" id="prompt" placeholder="Message..."> 
-<button id="voice-to-voice-and-text"><img src="img.svg.svg" alt="">v2vat</button>
-    <button id="voice-to-text"><img src="img.svg.svg" alt="">v2t</button>
-    <button id="stop-voice"><img src="img.svg" alt=""> Stop</button>
-<button id="restart-voice"><img src="img.svg" alt=""> Restart</button>
-        <button id="image"><img src="img.svg" alt=""> <input type="file" accept="images/*" hidden> </button> 
-    <button id="submit"><img src="submit.svg" alt=""></button>
-<button id="submit-text-to-voice-and-text"><img src="img.svg" alt="">t2vat</button>
+    <div class="prompt-area">
+    <input type="text" id="prompt" placeholder="Message...">
+    <div class="button-group">
+<button id="voice-to-voice-and-text"><img src="microphone.ico" alt=""><br>voice to voice and text</button>
+    <button id="voice-to-text"><img src="microphone.ico" alt=""><br>voice to text</button>
+    <button id="stop-voice"><img src="stop.ico" alt=""><br>stop</button>
+       <button id="restart-voice"><img src="play.ico" alt=""><br>restart</button>
+        <button id="image" style="position: relative;">
+            <img src="img.svg" alt="" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <br><br>image
+            <input type="file" accept="images/*" hidden>
+        </button> 
+    <button id="submit"><img src="submit.svg" alt=""><br>submit</button>
+<button id="submit-text-to-voice-and-text"><img src="start.ico" alt=""><br>text to voice and text</button>
+    </div>
 </div>
-    <div class="bottom-link"> <a href="#" onclick="showImagesAndCurrentInfoGenerationPage()">Go to Images and Current Info Generation Page</a></div>
-    <div class="buttons"> 
-    <button onclick="showPage1()">Go to virtual assistant chatbot page</button> 
-    <button onclick="showPage3()">Go to text to ai image generator page</button> 
-    </div>`;
+    <div class="bottom-link"> <a href="#" id="link" onclick="showImagesAndCurrentInfoGenerationPage()">Go to Images and Current Info Generation Page</a></div>
+    <div class="page-two-buttons">
+<button onclick="showPage1()">Go to virtual assistant chatbot page</button>
+<button onclick="showPage3()">Go to text to ai image generator page</button>
+</div>`;
     
     initTextImageRecognition(); 
 }
@@ -402,9 +883,9 @@ function initTextImageRecognition() {
     let chatContainer = document.querySelector(".chat-container"); 
     let imagebtn = document.querySelector("#image"); 
     let imageinput = document.querySelector("#image input"); 
-    let previewImage = document.querySelector("#previewImage"); 
+    let image = document.querySelector("#image img"); 
 
-    const Api_Url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=your-gemini-key";
+    const Api_Url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=Your_Gemini_API_Key";
 
     let user = { 
         message: null, 
@@ -413,8 +894,12 @@ function initTextImageRecognition() {
             data: null
         }
     };
+    let resumeBtn = document.querySelector("#resume-voice");
     
     let speechInstance = null; // Store current speech instance
+      let speechText = ""; // Full speech text
+    let firstPart = ""; // Spoken part
+    let secondPart = ""; // Remaining part
 
     let stopBtn = document.querySelector("#stop-voice");
     let restartBtn = document.querySelector("#restart-voice");
@@ -424,7 +909,7 @@ function initTextImageRecognition() {
             window.speechSynthesis.cancel(); // Stop speech
         }
     }
-
+     
     function restartSpeech() {
         if (speechInstance) {
             window.speechSynthesis.speak(speechInstance); // Resume speech
@@ -435,10 +920,15 @@ stopBtn.addEventListener("click", stopSpeech);
 restartBtn.addEventListener("click", restartSpeech);
     
     let voiceToTextBtn = document.querySelector("#voice-to-voice-and-text");
+let voiceToTextBtnImg = voiceToTextBtn.querySelector("img"); // Select the image inside the button
+
 voiceToTextBtn.addEventListener("click", () => {
     let greetingSpeech = new SpeechSynthesisUtterance("Hello, how can I help you?");
     speechInstance = greetingSpeech;
     window.speechSynthesis.speak(greetingSpeech);
+
+    // Change mic icon to microphone2.ico when recording starts
+    voiceToTextBtnImg.src = "microphone2.ico";
 
     greetingSpeech.onend = function() {
         let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -451,20 +941,30 @@ voiceToTextBtn.addEventListener("click", () => {
             prompt.value = userQuestion;
             handleChatResponse(userQuestion, true); // Both text and speech
         };
+
+        recognition.onend = function() {
+            // Restore mic icon after recording ends
+            voiceToTextBtnImg.src = "microphone.ico";
+        };
     };
-});
-    
+}); 
     let voiceToTextButton = document.querySelector("#voice-to-text");
+    let voiceToTextButtonImg = voiceToTextButton.querySelector("img"); // Select the image inside the button
     voiceToTextButton.addEventListener("click", () => {
         let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = "en-US";
         recognition.continuous = false;
+        // Change mic icon to microphone2.ico when recording starts
+    voiceToTextButtonImg.src = "microphone2.ico";
         recognition.start();
-
         recognition.onresult = function(event) {
             let userQuestion = event.results[0][0].transcript;
             prompt.value = userQuestion;
             handleChatResponse(userQuestion, false); // Text only
+        };
+        recognition.onend = function() {
+            // Restore mic icon after recording ends
+            voiceToTextButtonImg.src = "microphone.ico";
         };
     });
 
@@ -473,7 +973,6 @@ voiceToTextBtn.addEventListener("click", () => {
         let userMessage = prompt.value;
         handleChatResponse(userMessage, true); // Both text and speech
     });
-
     
 async function generateResponse(aiChatBox, enableSpeech) {
         let text = aiChatBox.querySelector(".ai-chat-area");
@@ -497,13 +996,101 @@ async function generateResponse(aiChatBox, enableSpeech) {
             let data = await response.json();
             let apiResponse = data.candidates[0]?.content?.parts[0]?.text?.replace(/\*\*(.*?)\*\*/g, "$1").trim() || "No details found.";
             text.innerHTML = apiResponse;
-
+            
             // Speak response only if enabled
             if (enableSpeech) {
                 let speech = new SpeechSynthesisUtterance(apiResponse);
                 speechInstance = speech;
                 window.speechSynthesis.speak(speech);
             }
+            let utterance = new SpeechSynthesisUtterance(apiResponse);
+// Create the speech control UI
+let speechControls = document.createElement("div");
+speechControls.classList.add("speech-controls");
+
+// Seek bar container
+let seekContainer = document.createElement("div");
+seekContainer.classList.add("seek-container");
+
+let seekBar = document.createElement("input");
+seekBar.type = "range";
+seekBar.min = "0";
+seekBar.max = "100";
+seekBar.value = "0";
+seekBar.classList.add("seek-bar");
+
+// Speed control dropdown
+let speedControl = document.createElement("select");
+speedControl.classList.add("speed-control");
+["0.5x", "1x", "1.5x", "2x"].forEach(speed => {
+    let option = document.createElement("option");
+    option.value = parseFloat(speed);
+    option.textContent = speed;
+    if (speed === "1x") option.selected = true;
+    speedControl.appendChild(option);
+});
+
+// Play button
+let playButton = document.createElement("button");
+playButton.classList.add("control-btn");
+playButton.innerHTML = "▶ Play";
+
+// Append elements
+seekContainer.appendChild(seekBar);
+speechControls.appendChild(playButton);
+speechControls.appendChild(seekContainer);
+speechControls.appendChild(speedControl);
+aiChatBox.appendChild(speechControls);
+        
+        let isPlaying = false;
+
+// Update seek bar in real-time
+utterance.onboundary = (event) => {
+    let percent = Math.round((event.charIndex / apiResponse.length) * 100);
+    seekBar.value = percent;
+};
+        
+seekBar.addEventListener("input", () => {
+    speechSynthesis.cancel();
+    lastPosition = seekBar.value; // Store new position
+    playButton.click(); // Restart from new position
+});
+        
+// Handle speed change
+speedControl.addEventListener("change", () => {
+    speechSynthesis.cancel();
+    utterance.rate = parseFloat(speedControl.value);
+    speechSynthesis.speak(utterance);
+});
+        let isPaused = false;
+let lastPosition = 0; // Store last spoken position
+
+playButton.addEventListener("click", () => {
+    if (!speechSynthesis.speaking || isPaused) {
+        speechSynthesis.cancel(); // Stop any existing speech
+
+        let startIndex = Math.floor((apiResponse.length * lastPosition) / 100);
+        utterance = new SpeechSynthesisUtterance(apiResponse.slice(startIndex)); // Restart from last position
+
+        utterance.rate = parseFloat(speedControl.value); // Maintain speed
+
+        // Update seek bar as speech progresses
+        utterance.onboundary = (event) => {
+            let percent = Math.round((event.charIndex / apiResponse.length) * 100);
+            seekBar.value = percent;
+            lastPosition = percent; // Store last position
+        };
+
+        speechSynthesis.speak(utterance);
+        isPaused = false;
+        playButton.textContent = "⏸ Pause";
+    } else {
+        speechSynthesis.cancel(); // Stop speech completely
+        isPaused = true;
+        playButton.textContent = "▶ Play";
+    }
+});
+       
         } catch (error) {
             console.log(error);
             text.innerHTML = "Error fetching response.";
@@ -534,9 +1121,8 @@ async function generateResponse(aiChatBox, enableSpeech) {
         prompt.value = "";
         let userChatBox = createChatBox(html, "user-chat-box");
         chatContainer.appendChild(userChatBox);
-
         scrollToBottom();
-
+        chatContainer.scrollTo({top:chatContainer.scrollHeight,behavior:"smooth"})
         setTimeout(() => {
             let html = `<img src="ai.png" alt="" id="aiImage" width="10%">
             <div class="ai-chat-area">
@@ -568,19 +1154,20 @@ async function generateResponse(aiChatBox, enableSpeech) {
                 mime_type: file.type,
                 data: base64string
             };
-            previewImage.src = `data:${user.file.mime_type};base64,${user.file.data}`;
-            previewImage.style.display = "block";
+            image.src=`data:${user.file.mime_type};base64,${user.file.data}`
+            image.classList.add("choose")
         };
         reader.readAsDataURL(file);
     });
 
     imagebtn.addEventListener("click", () => {
-        imageinput.click();
+        imagebtn.querySelector("input").click();
     });
 }
 
 
 function showImagesAndCurrentInfoGenerationPage() {
+    document.body.style="background-color:rgb(45, 52, 59)";
     app.innerHTML = `
         <div class="chat-container" style="width: 100%; height: calc(100vh - 80px);">
 <div class="ai-chat-box">
@@ -591,18 +1178,20 @@ Hello ! I am here to provide current info and images...How Can I Help you Today?
 </div>
 </div>
 <div class="prompt-area">
-<input type="text" id="prompt" placeholder="Message...">
-<button id="voice-to-voice-and-text"><img src="img.svg.svg" alt="">v2vat</button>
-    <button id="voice-to-text"><img src="img.svg.svg" alt="">v2t</button>
-    <button id="stop-voice"><img src="img.svg.svg" alt="">stop</button>
-    <button id="resume-voice"><img src="img.svg.svg" alt="">resume</button>
- <button id="submit"><img src="submit.svg" alt=""></button>
-<button id="submit-text-to-voice-and-text"><img src="img.svg" alt="">t2vat</button>
+    <input type="text" id="prompt" placeholder="Message...">
+    <div class="button-group">
+<button id="voice-to-voice-and-text"><img src="microphone.ico" alt=""><br>voice to voice and text</button>
+    <button id="voice-to-text"><img src="microphone.ico" alt=""><br>voice to text</button>
+    <button id="stop-voice"><img src="stop.ico" alt=""><br>stop</button>
+       <button id="restart-voice"><img src="play.ico" alt=""><br>restart</button>
+    <button id="submit"><img src="submit.svg" alt=""><br>submit</button>
+<button id="submit-text-to-voice-and-text"><img src="start.ico" alt=""><br>text to voice and text</button>
+    </div>
 </div>
-<div class="bottom-link">
+<div class="current-info-bottom-link">
 <a href="#" onclick="showPage2()">Back to Personal Chatbot Page</a>
 </div>
-<div class="buttons">
+<div class="page-two-buttons">
 <button onclick="showPage1()">Go to virtual assistant chatbot page</button>
 <button onclick="showPage3()">Go to text to ai image generator page</button>
 </div>
@@ -614,8 +1203,8 @@ function initImagesAndCurrrentInfoGeneration(){
     let submitbtn = document.querySelector("#submit"); 
     let chatContainer = document.querySelector(".chat-container");
     // Your Google API Key and Custom Search Engine ID
-const GOOGLE_API_KEY = "your_google_api_key"; // Replace with your Google API Key
-const SEARCH_ENGINE_ID = "your_google_search_engine_id"; // Replace with your Custom Search Engine ID
+const GOOGLE_API_KEY = "AIzaSyDGYBnfkVGjAXwmi0ty7nZ4Uy7_T1fy1ZU"; // Replace with your Google API Key
+const SEARCH_ENGINE_ID = "707d978d3dc704f69"; // Replace with your Custom Search Engine ID
     
 const APIs = {
     weather: "https://api.openweathermap.org/data/2.5/weather?q=", // Weather API
@@ -623,8 +1212,8 @@ const APIs = {
 };
     
     const API_KEYS = {
-    weather: "your_Weather_API_Key", // Weather API Key
-    news: "/your_GNews_API_Key", // GNews API Key
+    weather: " Your_Weather_API_Key", // Weather API Key
+    news: "Your_GNews_API_Key", // GNews API Key
 };
     
 let user = {
@@ -634,58 +1223,69 @@ let user = {
         data: null
     }
 };
-    let speechInstance = null; // Store current speech instance
+    
+let speechInstance = null;
+let stopBtn = document.querySelector("#stop-voice");
+let restartBtn = document.querySelector("#restart-voice");
 
-    let stopBtn = document.querySelector("#stop-voice");
-    let resumeBtn = document.querySelector("#resume-voice");
-
-    function stopSpeech() {
-        if (speechInstance) {
-            window.speechSynthesis.cancel(); // Stop speech
-        }
+function stopSpeech() {
+    if (speechInstance) {
+        window.speechSynthesis.cancel(); // Stop speech
     }
-
-    function resumeSpeech() {
-        if (speechInstance) {
-            window.speechSynthesis.speak(speechInstance); // Resume speech
-        }
+}
+ 
+function restartSpeech() {
+    if (speechInstance) {
+        window.speechSynthesis.speak(speechInstance); // Resume speech
     }
-
-    stopBtn.addEventListener("click", stopSpeech);
-    resumeBtn.addEventListener("click", resumeSpeech);
+}
+// Attach event listeners
+stopBtn.addEventListener("click", stopSpeech);
+restartBtn.addEventListener("click", restartSpeech);
     
     
     let voiceToTextBtn = document.querySelector("#voice-to-voice-and-text");
+    let voiceToTextBtnImg = voiceToTextBtn.querySelector("img"); // Select the image inside the button
     voiceToTextBtn.addEventListener("click", () => {
         let greetingSpeech = new SpeechSynthesisUtterance("Hello, how can I help you?");
         speechInstance = greetingSpeech;
         window.speechSynthesis.speak(greetingSpeech);
-
+          // Change mic icon to microphone2.ico when recording starts
+    voiceToTextBtnImg.src = "microphone2.ico";
         greetingSpeech.onend = function() {
-            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = "en-US"; 
-            recognition.continuous = false; 
+            let recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = "en-US";
+            recognition.continuous = false;
             recognition.start();
-
             recognition.onresult = function(event) {
                 let userQuestion = event.results[0][0].transcript;
                 prompt.value = userQuestion;
                 handleChatResponse(userQuestion, true); // Both text and speech
             };
+            recognition.onend = function() {
+            // Restore mic icon after recording ends
+            voiceToTextBtnImg.src = "microphone.ico";
+        };
         };
     });
     
     let voiceToTextButton = document.querySelector("#voice-to-text");
+    let voiceToTextButtonImg = voiceToTextButton.querySelector("img"); // Select the image inside the button
     voiceToTextButton.addEventListener("click", () => {
         let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = "en-US";
         recognition.continuous = false;
+          // Change mic icon to microphone2.ico when recording starts
+    voiceToTextButtonImg.src = "microphone2.ico";
         recognition.start();
-
         recognition.onresult = function(event) {
             let userQuestion = event.results[0][0].transcript;
             prompt.value = userQuestion;
             handleChatResponse(userQuestion, false); // Text only
+        };
+        recognition.onend = function() {
+            // Restore mic icon after recording ends
+            voiceToTextButtonImg.src = "microphone.ico";
         };
     });
 
@@ -697,6 +1297,126 @@ let user = {
         }
     });
 
+    function addImageEventListeners() {
+        document.querySelectorAll('.download-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const url = e.target.closest('.image-wrapper').querySelector('img').src;
+                downloadImage(url);
+            });
+        });
+    
+        document.querySelectorAll('.preview-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const url = e.target.closest('.image-wrapper').querySelector('img').src;
+                previewImage(url);
+            });
+        });
+    
+        document.querySelectorAll('.share-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const imgSrc = e.target.closest('.image-wrapper').querySelector('img').src;
+                shareImage(imgSrc);
+            });
+        });
+    }
+    
+    function previewImage(url) {
+        const modal = document.createElement('div');
+        modal.id = 'preview-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        modal.style.display = 'flex';
+        modal.style.justifyContent = 'center';
+        modal.style.alignItems = 'center';
+        modal.style.zIndex = '1000';
+    
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.maxWidth = '90%';
+        img.style.maxHeight = '90%';
+        img.style.borderRadius = '10px';
+    
+        const closeBtn = document.createElement('span');
+        closeBtn.innerHTML = '&times;';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '10px';
+        closeBtn.style.right = '20px';
+        closeBtn.style.fontSize = '30px';
+        closeBtn.style.color = 'white';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
+    
+        modal.appendChild(img);
+        modal.appendChild(closeBtn);
+        document.body.appendChild(modal);
+    }
+    
+    async function downloadImage(url, sourcePageUrl) {
+    const corsProxy = "https://api.allorigins.win/raw?url="; // Reliable CORS proxy
+    const proxyUrl = corsProxy + encodeURIComponent(url);
+
+    // Show loading message
+    const downloadButton = event.target; 
+    downloadButton.textContent = "Downloading...";
+    downloadButton.disabled = true;
+
+    try {
+        const response = await fetch(proxyUrl, { mode: "cors" });
+
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+        const clonedResponse = response.clone(); // Clone to check content type
+        const contentType = clonedResponse.headers.get("content-type");
+
+        // If the content is not an image, redirect to the source page
+        if (!contentType || !contentType.startsWith("image")) {
+            throw new Error("Blocked image detected");
+        }
+
+        // Proceed with downloading
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = "downloaded-image.jpg";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000); // Cleanup
+
+    } catch (error) {
+        console.error("❌ Image download failed:", error.message);
+
+        alert("⚠️ Unable to download the image. Redirecting to the image source page...");
+        if (sourcePageUrl) {
+            window.open(sourcePageUrl, "_blank");
+        }
+    } finally {
+        // Restore button state
+        downloadButton.textContent = "Download";
+        downloadButton.disabled = false;
+    }
+}
+
+    
+    function shareImage(imgSrc) {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Check out this image!',
+                url: imgSrc
+            }).catch(console.error);
+        } else {
+            alert('Sharing is not supported in this browser.');
+        }
+    }
     
 // Function to fetch data from any given API
 async function fetchAPIData(url, options = {}) {
@@ -708,8 +1428,7 @@ async function fetchAPIData(url, options = {}) {
         return null;
     }
 }
-
-// Function to generate response
+    
 async function generateResponse(aiChatBox,enableSpeech) {
     let text = aiChatBox.querySelector(".ai-chat-area");
     const query = user.message;
@@ -725,9 +1444,17 @@ if (query.includes("image") || query.includes("photo") || query.includes("pictur
 
         if (data.items && data.items.length > 0) {
             let imageHtml = data.items.map(item => `
-                <img src="${item.link}" class="generated-image" style="width: 200px; height: 200px; object-fit: cover;" />
+                <div class="image-wrapper">
+                        <img src="${item.link}" class="generated-image" style="width: 200px; height: 200px; object-fit: cover;" />
+                        <div class="image-actions">
+                            <button class="preview-btn">Preview</button>
+                            <button class="download-btn">Download</button>
+                            <button class="share-btn">Share</button>
+                        </div>
+                    </div>
             `).join("");
             text.innerHTML = imageHtml;
+            addImageEventListeners();
         } else {
             text.innerHTML = "Sorry, I couldn't find any relevant images.";
             if (enableSpeech) {
@@ -764,6 +1491,93 @@ if (query.includes("image") || query.includes("photo") || query.includes("pictur
                 Pressure: ${data.main.pressure} hPa
             `;
             text.innerHTML = weatherInfo;
+            let utterance = new SpeechSynthesisUtterance(weatherInfo);
+// Create the speech control UI
+let speechControls = document.createElement("div");
+speechControls.classList.add("speech-controls");
+
+// Seek bar container
+let seekContainer = document.createElement("div");
+seekContainer.classList.add("seek-container");
+
+let seekBar = document.createElement("input");
+seekBar.type = "range";
+seekBar.min = "0";
+seekBar.max = "100";
+seekBar.value = "0";
+seekBar.classList.add("seek-bar");
+
+// Speed control dropdown
+let speedControl = document.createElement("select");
+speedControl.classList.add("speed-control");
+["0.5x", "1x", "1.5x", "2x"].forEach(speed => {
+    let option = document.createElement("option");
+    option.value = parseFloat(speed);
+    option.textContent = speed;
+    if (speed === "1x") option.selected = true;
+    speedControl.appendChild(option);
+});
+
+// Play button
+let playButton = document.createElement("button");
+playButton.classList.add("control-btn");
+playButton.innerHTML = "▶ Play";
+
+// Append elements
+seekContainer.appendChild(seekBar);
+speechControls.appendChild(playButton);
+speechControls.appendChild(seekContainer);
+speechControls.appendChild(speedControl);
+aiChatBox.appendChild(speechControls);
+        
+        let isPlaying = false;
+
+// Update seek bar in real-time
+utterance.onboundary = (event) => {
+    let percent = Math.round((event.charIndex / weatherInfo.length) * 100);
+    seekBar.value = percent;
+};
+        
+seekBar.addEventListener("input", () => {
+    speechSynthesis.cancel();
+    lastPosition = seekBar.value; // Store new position
+    playButton.click(); // Restart from new position
+});
+        
+// Handle speed change
+speedControl.addEventListener("change", () => {
+    speechSynthesis.cancel();
+    utterance.rate = parseFloat(speedControl.value);
+    speechSynthesis.speak(utterance);
+});
+        let isPaused = false;
+let lastPosition = 0; // Store last spoken position
+
+playButton.addEventListener("click", () => {
+    if (!speechSynthesis.speaking || isPaused) {
+        speechSynthesis.cancel(); // Stop any existing speech
+
+        let startIndex = Math.floor((weatherInfo.length * lastPosition) / 100);
+        utterance = new SpeechSynthesisUtterance(weatherInfo.slice(startIndex)); // Restart from last position
+
+        utterance.rate = parseFloat(speedControl.value); // Maintain speed
+
+        // Update seek bar as speech progresses
+        utterance.onboundary = (event) => {
+            let percent = Math.round((event.charIndex / weatherInfo.length) * 100);
+            seekBar.value = percent;
+            lastPosition = percent; // Store last position
+        };
+
+        speechSynthesis.speak(utterance);
+        isPaused = false;
+        playButton.textContent = "⏸ Pause";
+    } else {
+        speechSynthesis.cancel(); // Stop speech completely
+        isPaused = true;
+        playButton.textContent = "▶ Play";
+    }
+});
             if (enableSpeech) {
                 let speech = new SpeechSynthesisUtterance(weatherInfo);
                 speechInstance = speech;
@@ -798,6 +1612,93 @@ if (query.includes("image") || query.includes("photo") || query.includes("pictur
                         <a href="${article.url}" target="_blank">Read more</a><br><br>
                     `).join("");
                 text.innerHTML = newsDetails || "No news details found.";
+                let utterance = new SpeechSynthesisUtterance(newsDetails);
+// Create the speech control UI
+let speechControls = document.createElement("div");
+speechControls.classList.add("speech-controls");
+
+// Seek bar container
+let seekContainer = document.createElement("div");
+seekContainer.classList.add("seek-container");
+
+let seekBar = document.createElement("input");
+seekBar.type = "range";
+seekBar.min = "0";
+seekBar.max = "100";
+seekBar.value = "0";
+seekBar.classList.add("seek-bar");
+
+// Speed control dropdown
+let speedControl = document.createElement("select");
+speedControl.classList.add("speed-control");
+["0.5x", "1x", "1.5x", "2x"].forEach(speed => {
+    let option = document.createElement("option");
+    option.value = parseFloat(speed);
+    option.textContent = speed;
+    if (speed === "1x") option.selected = true;
+    speedControl.appendChild(option);
+});
+
+// Play button
+let playButton = document.createElement("button");
+playButton.classList.add("control-btn");
+playButton.innerHTML = "▶ Play";
+
+// Append elements
+seekContainer.appendChild(seekBar);
+speechControls.appendChild(playButton);
+speechControls.appendChild(seekContainer);
+speechControls.appendChild(speedControl);
+aiChatBox.appendChild(speechControls);
+        
+        let isPlaying = false;
+
+// Update seek bar in real-time
+utterance.onboundary = (event) => {
+    let percent = Math.round((event.charIndex / newsDetails.length) * 100);
+    seekBar.value = percent;
+};
+        
+seekBar.addEventListener("input", () => {
+    speechSynthesis.cancel();
+    lastPosition = seekBar.value; // Store new position
+    playButton.click(); // Restart from new position
+});
+        
+// Handle speed change
+speedControl.addEventListener("change", () => {
+    speechSynthesis.cancel();
+    utterance.rate = parseFloat(speedControl.value);
+    speechSynthesis.speak(utterance);
+});
+        let isPaused = false;
+let lastPosition = 0; // Store last spoken position
+
+playButton.addEventListener("click", () => {
+    if (!speechSynthesis.speaking || isPaused) {
+        speechSynthesis.cancel(); // Stop any existing speech
+
+        let startIndex = Math.floor((newsDetails.length * lastPosition) / 100);
+        utterance = new SpeechSynthesisUtterance(newsDetails.slice(startIndex)); // Restart from last position
+
+        utterance.rate = parseFloat(speedControl.value); // Maintain speed
+
+        // Update seek bar as speech progresses
+        utterance.onboundary = (event) => {
+            let percent = Math.round((event.charIndex / newsDetails.length) * 100);
+            seekBar.value = percent;
+            lastPosition = percent; // Store last position
+        };
+
+        speechSynthesis.speak(utterance);
+        isPaused = false;
+        playButton.textContent = "⏸ Pause";
+    } else {
+        speechSynthesis.cancel(); // Stop speech completely
+        isPaused = true;
+        playButton.textContent = "▶ Play";
+    }
+});
                 if (enableSpeech) {
                     let speech = new SpeechSynthesisUtterance(newsDetails);
                     speechInstance = speech;
@@ -834,6 +1735,94 @@ if (query.includes("image") || query.includes("photo") || query.includes("pictur
                     fullInformation += data.items[i].snippet + ' ';
                 }
                 text.innerHTML = fullInformation || "Sorry, I couldn't find detailed information.";
+                let utterance = new SpeechSynthesisUtterance(fullInformation);
+// Create the speech control UI
+let speechControls = document.createElement("div");
+speechControls.classList.add("speech-controls");
+
+// Seek bar container
+let seekContainer = document.createElement("div");
+seekContainer.classList.add("seek-container");
+
+let seekBar = document.createElement("input");
+seekBar.type = "range";
+seekBar.min = "0";
+seekBar.max = "100";
+seekBar.value = "0";
+seekBar.classList.add("seek-bar");
+
+// Speed control dropdown
+let speedControl = document.createElement("select");
+speedControl.classList.add("speed-control");
+["0.5x", "1x", "1.5x", "2x"].forEach(speed => {
+    let option = document.createElement("option");
+    option.value = parseFloat(speed);
+    option.textContent = speed;
+    if (speed === "1x") option.selected = true;
+    speedControl.appendChild(option);
+});
+
+// Play button
+let playButton = document.createElement("button");
+playButton.classList.add("control-btn");
+playButton.innerHTML = "▶ Play";
+
+// Append elements
+seekContainer.appendChild(seekBar);
+speechControls.appendChild(playButton);
+speechControls.appendChild(seekContainer);
+speechControls.appendChild(speedControl);
+aiChatBox.appendChild(speechControls);
+        
+        let isPlaying = false;
+
+// Update seek bar in real-time
+utterance.onboundary = (event) => {
+    let percent = Math.round((event.charIndex / fullInformation.length) * 100);
+    seekBar.value = percent;
+};
+        
+seekBar.addEventListener("input", () => {
+    speechSynthesis.cancel();
+    lastPosition = seekBar.value; // Store new position
+    playButton.click(); // Restart from new position
+});
+        
+// Handle speed change
+speedControl.addEventListener("change", () => {
+    speechSynthesis.cancel();
+    utterance.rate = parseFloat(speedControl.value);
+    speechSynthesis.speak(utterance);
+});
+        let isPaused = false;
+let lastPosition = 0; // Store last spoken position
+
+playButton.addEventListener("click", () => {
+    if (!speechSynthesis.speaking || isPaused) {
+        speechSynthesis.cancel(); // Stop any existing speech
+
+        let startIndex = Math.floor((fullInformation.length * lastPosition) / 100);
+        utterance = new SpeechSynthesisUtterance(fullInformation.slice(startIndex)); // Restart from last position
+
+        utterance.rate = parseFloat(speedControl.value); // Maintain speed
+
+        // Update seek bar as speech progresses
+        utterance.onboundary = (event) => {
+            let percent = Math.round((event.charIndex / fullInformation.length) * 100);
+            seekBar.value = percent;
+            lastPosition = percent; // Store last position
+        };
+
+        speechSynthesis.speak(utterance);
+        isPaused = false;
+        playButton.textContent = "⏸ Pause";
+    } else {
+        speechSynthesis.cancel(); // Stop speech completely
+        isPaused = true;
+        playButton.textContent = "▶ Play";
+    }
+});
+                
                 if (enableSpeech) {
                     let speech = new SpeechSynthesisUtterance(fullInformation);
                     speechInstance = speech;
@@ -855,8 +1844,6 @@ if (query.includes("image") || query.includes("photo") || query.includes("pictur
     }
     
 }
-    
-    
     
 function createChatBox(html, classes) {
     let div = document.createElement("div");
@@ -913,26 +1900,29 @@ prompt.addEventListener("keydown", (e) => {
 
 // Render the page with Button 1 and Button 2
 function showPage3() {
-    document.body.style.backgroundImage = "none";
+    document.body.style="background-color: #B790B5";
     app.innerHTML = `
     <div class="buttons">
         <button onclick="showPage1()">Go to virtual assistant chatbot page</button>
         <button onclick="showPage2()">Go to personal chatbot page</button>
-        <button onclick="showLogOutPage()" id="lgt-btn">Logout</button>"
+        <button onclick="showLogOutPage()" id="lgt-btn">Logout</button>
     </div>
     <div class="text-to-image-container">
     <h1>'AI' TEXT TO IMAGE GENERATOR</h1>
     <div class="input">
         <label for="">Create an image from Text prompt :
         </label>
+    <div class="input-container">
         <input type="text" name="" id="input" placeholder="Enter a Text to Generate The Image">
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-input" id="third-page-mic-icon">
+        </div>
         <button id="gbtn">Generate Image <img src="gen.svg" alt=""></button>
     </div>
     <div class="output">
        <div class="gimage"> 
         <img id="gimage" src="" alt="">
         <img  id="svg" src="image.svg" alt="">
-        <img id="loading" src="https://media1.giphy.com/media/uIJBFZoOaifHf52MER/200w.gif?cid=6c09b952krmmhrqbfpwoyypd75hfoa8xddg0g311s8ygzy8i&ep=v1_gifs_search&rid=200w.gif&ct=g" alt="">
+        <img id="loading" src="load.webp" alt="">
     </div>
       
         <div class="dbtns">
@@ -941,8 +1931,49 @@ function showPage3() {
         </div>
     </div>
             `;
+    initMicForTextToImage();
             initImageGeneration();
         }
+function initMicForTextToImage() {
+    initMicForField("input", ".mic-input", "Please say the text to generate an AI image.");
+}
+
+function initMicForField(fieldId, micClass, promptMessage) {
+    const micButton = document.querySelector(micClass);
+    const inputField = document.getElementById(fieldId);
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Voice input is not supported on your browser.");
+        micButton.style.display = "none"; // Hide mic button if not supported
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    micButton.addEventListener("click", () => {
+        micButton.src = "microphone2.svg"; // Change mic icon
+        speak(promptMessage, () => {
+            recognition.start();
+        });
+    });
+
+    recognition.onresult = (event) => {
+        let transcript = event.results[0][0].transcript.trim();
+        inputField.value = transcript;
+    };
+
+    recognition.onend = () => {
+        micButton.src = "microphone.svg"; // Revert mic icon
+    };
+
+    recognition.onerror = (event) => {
+        alert(`Error: ${event.error}`);
+        micButton.src = "microphone.svg"; // Ensure icon resets on error
+    };
+}
         // image recognition
 function initImageGeneration(){
 const key = "your_hugging_face_api_key";
@@ -980,29 +2011,40 @@ query().then((response) => {
 	downloadBtn.addEventListener("click" , ()=>{
 		download(objectUrl)
 	})
-
-	
 });
 }
 
-GenBtn.addEventListener( "click" , () =>{
-	generate();
-		svg.style.display="none"
-
+GenBtn.addEventListener("click", () => {
+    generate();
+    svg.style.display = "none";
 });
 
 inputText.addEventListener( "keydown" , (e) =>{
-   if(e.key == "Enter")
-   {
-	generate();
-	svg.style.display="none"
-   }
-   
-})
+    if(e.key == "Enter")
+    {
+     generate();
+     svg.style.display="none"
+    }
+    
+ })
+
+function generate() {
+    load.style.display = "block";
+    query().then((response) => {
+        const objectUrl = URL.createObjectURL(response);
+        gimage.src = objectUrl;
+        load.style.display = "none";
+
+        // Update download button to only download the latest image
+        downloadBtn.onclick = () => {
+            download(objectUrl);
+        };
+    });
+}
 ResetBtn.addEventListener ("click" , () =>{
     inputText.value = ""
-	window.location.reload();
-
+	window.location.reload=showPage3();
+    
 })
  function download(objectUrl){
 
@@ -1018,14 +2060,15 @@ ResetBtn.addEventListener ("click" , () =>{
 }
 
 }
+
 function initVoiceInputForSignUp() {
   const voiceButton = document.getElementById("voice-input");
   const usernameInput = document.getElementById("signup-username");
   const emailInput = document.getElementById("signup-email");
   const passwordInput = document.getElementById("signup-password");
   const confirmPasswordInput = document.getElementById("signup-confirm-password");
-  const securityQuestionInput = document.getElementById("security-question").value;
-  const securityAnswerInput = document.getElementById("security-answer").value;
+  const securityQuestionInput = document.getElementById("security-question")
+  const securityAnswerInput = document.getElementById("security-answer")
   const voiceStatus = document.getElementById("voice-status");
   
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1052,12 +2095,11 @@ function initVoiceInputForSignUp() {
   recognition.onresult = (event) => {
       let transcript = event.results[0][0].transcript.toLowerCase().trim();
 
-      // Handle symbol replacements for email
-      transcript = transcript
-          .replace(/at the rate of/g, "@")
-          .replace(/dot/g, ".")
-          .replace(/underscore/g, "_")
-          .replace(/dash/g, "-");
+       transcript = transcript
+        .replace(/\s*at the rate of\s*/gi, "@")  // Handles "at the rate of"
+        .replace(/\s*dot\s*/gi, ".")            // Handles "dot"
+        .replace(/\s*underscore\s*/gi, "_")     // Handles "underscore"
+        .replace(/\s*dash\s*/gi, "-")           // Handles "dash"
 
       switch (currentStep) {
           case 0:
@@ -1066,7 +2108,7 @@ function initVoiceInputForSignUp() {
               currentStep++;
               break;
           case 1:
-              emailInput.value = transcript;
+              emailInput.value = transcript.replace(/\s+/g, "");// Removes remaining spaces
               speak("Please say your password.");
               currentStep++;
               break;
@@ -1092,7 +2134,9 @@ function initVoiceInputForSignUp() {
                   usernameInput.value,
                   emailInput.value,
                   passwordInput.value,
-                  confirmPasswordInput.value
+                  confirmPasswordInput.value,
+                  securityQuestionInput.value,
+                  securityAnswerInput.value
               );
             
               currentStep = 0; // Reset for next user
@@ -1327,16 +2371,29 @@ function showForgotPasswordPage() {
     <div class="forgot-password-container">
         <h2>Forgot Password</h2>
         <form id="forgot-password-form">
-            <input type="email" id="forgot-email" placeholder="Enter your email" required><br>
-            <label for="security-question">Security Question:</label>
-            <input type="text" id="security-question" placeholder="Security Question" readonly><br><br>
-            <div class="password-field">
-            <label for="security-answer">Answer:</label>
-            <input type="password" id="security-answer" placeholder="Enter your answer" required>
-            <button type="button" class="toggle-password" data-target="security-answer">👁️</button>
-            </div><br><br>
-            <button type="submit" class="forgot-password-button">Send Reset Link</button>
+    <label for="regisstered-email">Regisstered Email:</label>
+    <div class="input-container">
+            <input type="email" id="forgot-email" placeholder="Enter your email" required autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+            <img src="microphone.svg" alt="Mic" class="mic-icon mic-forgot-email">
+    </div>
+    <label for="security-question">Security Question:</label>
+     <div class="input-container">
+            <input type="text" id="security-question" placeholder="security question" readonly>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-security-question">
+        </div>
+    <label for="security-answer">Answer:</label>
+    <div class="password-field">
+    <div class="input-container">
+            <input type="password" id="security-answer" placeholder="password" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-security-answer">
+    </div>
+    <button type="button" class="toggle-password" data-target="security-answer">👁️</button>
+    </div><br>
+            <button type="submit" class="forgot-password-button">Send Reset Code</button><br><br>
+    <button type="button" id="voice-input">🎤 Speak</button> <!-- Voice input button -->
+            <p id="voice-status">Press the button to start the signup process via voice.</p>
         </form>
+    <p>Cancel Forgot Password? <span class="link" onclick="showLoginPage()">Back to previous page</span></p>
     </div>
     `;
     initPasswordToggle();
@@ -1352,23 +2409,208 @@ function showForgotPasswordPage() {
             securityQuestionInput.value = '';
         }
     });
+    initForgotPasswordSpeakButton();
     initForgotPasswordForm(); // Initialize forgot password form logic
+    initForgotPasswordMicButtons();
 }
-function initPasswordToggle() {
-    document.querySelectorAll('.toggle-password').forEach(button => {
-        button.addEventListener('click', () => {
-            const target = document.getElementById(button.getAttribute('data-target'));
-            if (target.type === 'password') {
-                target.type = 'text';
-                button.textContent = '🙈'; // Change icon to hide
-            } else {
-                target.type = 'password';
-                button.textContent = '👁️'; // Change icon to show
+function initForgotPasswordSpeakButton() {
+    const voiceInputButton = document.getElementById("voice-input");
+
+    voiceInputButton.addEventListener("click", async () => {
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        let user = null;
+
+        // Step 1: Ask for the registered email
+        speakText("Please say your registered email.");
+        let spokenEmail = await recognizeSpeech();
+
+        if (!spokenEmail) {
+            speakText("I didn't hear anything. Try again.");
+            return;
+        }
+
+        // Process spoken email input
+        let processedEmail = processEmailInput(spokenEmail);
+        document.getElementById("forgot-email").value = processedEmail; // Display processed email
+
+        // Step 2: Check if email exists
+        user = users.find((u) => u.email.toLowerCase() === processedEmail.toLowerCase());
+
+        if (!user) {
+            speakText("Email is wrong.");
+            return;
+        }
+
+        // Step 3: Speak and display security question
+        const securityQuestion = user.securityQuestion;
+        speakText(`Your security question is: ${securityQuestion}`);
+        document.getElementById("security-question").value = securityQuestion; // Display security question
+
+        // Step 4: Ask for the security answer
+        speakText("Please say the answer to your security question.");
+        
+        setTimeout(async () => {  // Ensuring speech synthesis completes before recognition
+            let spokenAnswer = await recognizeSpeech();
+
+            if (!spokenAnswer) {
+                speakText("I didn't hear your answer. Try again.");
+                return;
             }
-        });
+
+            document.getElementById("security-answer").value = spokenAnswer; // Display spoken answer
+
+            // Step 5: Check if the spoken answer is correct
+            if (user.securityAnswer.toLowerCase() !== spokenAnswer.toLowerCase()) {
+                speakText("Answer is wrong.");
+                return;
+            }
+
+            // Step 6: Generate and display the reset token
+            const resetToken = generateResetToken();
+            document.getElementById("forgot-password-form").innerHTML += `<p>Your Reset Token: <strong>${resetToken}</strong></p>`;
+
+            // Step 7: Speak the reset token slowly (one letter at a time)
+            let slowTokenSpeech = resetToken.split("").join(" "); // Add space between letters
+            await speakText(`Your reset token is: ${slowTokenSpeech}`);
+
+            // Store the reset token
+            localStorage.setItem("resetToken", resetToken);
+
+            // Step 8: After speaking, go to showResetPasswordPage()
+            showResetPasswordPage();
+
+        }, 3000); // Added delay to avoid speech synthesis interfering with speech recognition
     });
 }
 
+// Function to process spoken email input (handling special characters)
+function processEmailInput(spokenText) {
+    return spokenText
+        .toLowerCase()
+        .replace(/\bat the rate of\b/g, "@")
+        .replace(/\bdot\b/g, ".")
+        .replace(/\bdash\b/g, "-")
+        .replace(/\s+/g, ""); // Remove spaces
+}
+
+// Function to generate a random reset token
+function generateResetToken() {
+    return Math.random().toString(36).substr(2, 8).toUpperCase();
+}
+
+// Function to convert text to speech
+function speakText(text) {
+    return new Promise((resolve) => {
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.rate = 0.7; // Slower speech rate for better clarity
+        speech.onend = resolve;
+        window.speechSynthesis.speak(speech);
+    });
+}
+
+// Function to recognize speech input
+function recognizeSpeech() {
+    return new Promise((resolve) => {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = "en-US";
+        recognition.start();
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            resolve(transcript);
+        };
+
+        recognition.onerror = () => {
+            resolve("");
+        };
+
+        recognition.onend = () => {
+            recognition.stop();
+        };
+    });
+}
+function initMicForForgotPasswordField(fieldId, micClass, promptMessage, isEmail = false) {
+    const micButton = document.querySelector(micClass);
+    const inputField = document.getElementById(fieldId);
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Voice input is not supported on your browser.");
+        micButton.style.display = "none"; // Hide mic button if not supported
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    micButton.addEventListener("click", () => {
+        micButton.src = "microphone2.svg"; // Change mic image to active state
+        speak(promptMessage, () => {
+            recognition.start();
+        });
+    });
+
+    recognition.onresult = (event) => {
+        let transcript = event.results[0][0].transcript.trim();
+
+        // Special formatting for email input
+        if (fieldId === "forgot-email") {
+            transcript = transcript
+                .replace(/at the rate of/g, "@")
+                .replace(/dot/g, ".")
+                .replace(/underscore/g, "_")
+                .replace(/dash/g, "-")
+                .replace(/\s+/g, "");
+        }
+
+        inputField.value = transcript.toLowerCase();
+    };
+
+    recognition.onend = () => {
+        micButton.src = "microphone.svg"; // Revert mic image after speech ends
+    };
+
+    recognition.onerror = (event) => {
+        alert(`Error: ${event.error}`);
+        micButton.src = "microphone.svg"; // Ensure image resets on error
+    };
+}
+// Special function for security question (reads the displayed question)
+function initMicForSecurityQuestion() {
+    const micButton = document.querySelector(".mic-security-question");
+    const questionInput = document.getElementById("security-question");
+
+    if (!micButton || !questionInput) return;
+
+    micButton.addEventListener("click", () => {
+        const questionText = questionInput.value.trim();
+        if (questionText) {
+            speak(questionText); // Speak the security question
+        } else {
+            speak("No security question found.");
+        }
+    });
+}
+
+// Function to speak a message
+function speak(message, callback) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(message);
+
+    utterance.onend = () => {
+        if (callback) callback(); // Start recognition after speech ends
+    };
+
+    synth.speak(utterance);
+}
+
+// Initialize mic buttons for forgot password fields
+function initForgotPasswordMicButtons() {
+    initMicForForgotPasswordField("forgot-email", ".mic-forgot-email", "Please say your registered email.");
+    initMicForForgotPasswordField("security-answer", ".mic-security-answer", "Please say the answer to your security question.");
+    initMicForSecurityQuestion(); // Security question should be spoken, not dictated
+}
 function initForgotPasswordForm() {
     document.getElementById('forgot-password-form').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -1382,17 +2624,18 @@ function initForgotPasswordForm() {
             // Generate a reset token (in a real-world app, send a reset link via email)
             const resetToken = Math.random().toString(36).substr(2, 8);  // Simulated token
             localStorage.setItem("resetToken", resetToken);
+            if (user.securityAnswer.toLowerCase() !== securityAnswerInput.toLowerCase()) {  
+    alert("Incorrect security answer!");  
+    return;  
+}  
+localStorage.setItem("resetEmail", email); // Store email for later use  
+localStorage.setItem("resetToken", resetToken);  
+
+// Show reset token in a prompt (copyable on mobile)
+prompt("Here is your reset token. Copy it:", resetToken);
+
+showResetPasswordPage();
             
-            if (user.securityAnswer.toLowerCase() !== securityAnswerInput.toLowerCase()) {
-                alert("Incorrect security answer!");
-                return;
-            }
-            localStorage.setItem("resetEmail", email); // Store email for later use
-
-            alert(`A password reset link is. (Reset Token: ${resetToken})`);
-
-            showResetPasswordPage();  // Show the Reset Password Page
-            showResetPasswordPage();  // Show the Reset Password Page
         } else {
             alert("Email not found!");
         }
@@ -1405,16 +2648,154 @@ function showResetPasswordPage() {
     <div class="reset-password-container">
         <h2>Reset Your Password</h2>
         <form id="reset-password-form">
+    <label for="reset-token">Reset Token:</label>
             <input type="text" id="reset-token" placeholder="Enter your reset token" required><br>
-            <input type="password" id="new-password" placeholder="New Password" required><br>
-            <input type="password" id="confirm-new-password" placeholder="Confirm New Password" required><br>
-            <button type="submit" class="reset-password-button">Reset Password</button>
+    <label for="new-password">New Password:</label>
+            <div class="password-field">
+    <div class="input-container">
+            <input type="password" id="new-password" placeholder="New Password" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-new-password">
+        </div>
+            <button type="button" class="toggle-password" data-target="new-password">👁️</button>
+           </div>
+    <label for="confirm-new-password">Confirm New Password:</label>
+            <div class="password-field">
+    <div class="input-container">
+            <input type="password" id="confirm-new-password" placeholder="Confirm New Password" required>
+    <img src="microphone.svg" alt="Mic" class="mic-icon mic-confirm-new-password">
+        </div>
+            <button type="button" class="toggle-password" data-target="confirm-new-password">👁️</button>
+        </div>
+    <button type="submit" class="reset-password-button">Reset Password</button><br><br>
+    <button type="button" id="voice-input">🎤 Speak</button> <!-- Voice input button -->
+            <p id="voice-status">Press the button to start the signup process via voice.</p>
+      
         </form>
+    <p>Cancel Reset Password? <span class="link" onclick="showForgotPasswordPage()">Back to previous page</span></p>
     </div>
     `;
+    initSpeakForResetPassword();
+    initMicForResetPassword();
     initResetPasswordForm();  // Initialize reset password form logic
+    initPasswordToggle();
+}
+function initSpeakForResetPassword() {
+    const voiceInputButton = document.getElementById("voice-input");
+
+    voiceInputButton.addEventListener("click", async () => {
+        const storedToken = localStorage.getItem("resetToken"); // Get stored reset token
+
+        // Step 1: Speak and take reset token input
+        speakText("Please say your reset token.");
+        let spokenToken = await recognizeSpeech();
+        spokenToken = spokenToken.toLowerCase().trim().replace(/\s/g, "");// Convert to lowercase and remove spaces
+
+        document.getElementById("reset-token").value = spokenToken; // Display spoken token
+
+        // Step 2: Verify the reset token
+        if (spokenToken !== storedToken.toLowerCase().trim()) {
+            speakText("Reset token is incorrect.");
+            return;
+        }
+
+        // Step 3: Speak and take new password input
+        speakText("Please say your new password.");
+        let spokenNewPassword = await recognizeSpeech();
+        spokenNewPassword = spokenNewPassword.toLowerCase().trim().replace(/\s/g, "");;
+
+        document.getElementById("new-password").value = spokenNewPassword;
+
+        // Step 4: Speak and take confirm password input
+        speakText("Please say confirm password.");
+        let spokenConfirmPassword = await recognizeSpeech();
+        spokenConfirmPassword = spokenConfirmPassword.toLowerCase().trim().replace(/\s/g, "");;
+
+        document.getElementById("confirm-new-password").value = spokenConfirmPassword;
+
+        // Step 5: Verify if passwords match
+        if (spokenNewPassword !== spokenConfirmPassword) {
+            speakText("Passwords do not match.");
+            return;
+        }
+
+        // Step 6: Password successfully set
+        speakText("Password set successfully.");
+        
+        // Redirect to login page
+        setTimeout(() => {
+            showLoginPage();
+        }, 2000);
+    });
 }
 
+// Function to convert text to speech
+function speakText(text) {
+    const speech = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(speech);
+}
+
+// Function to recognize speech input
+function recognizeSpeech() {
+    return new Promise((resolve) => {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = "en-US";
+        recognition.start();
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            resolve(transcript);
+        };
+
+        recognition.onerror = () => {
+            resolve("");
+        };
+
+        recognition.onend = () => {
+            recognition.stop();
+        };
+    });
+}
+function initMicForResetPassword() {
+    initMicForField("new-password", ".mic-new-password", "Please say your new password.");
+    initMicForField("confirm-new-password", ".mic-confirm-new-password", "Please say your new password again to confirm.");
+}
+
+function initMicForField(fieldId, micClass, promptMessage) {
+    const micButton = document.querySelector(micClass);
+    const inputField = document.getElementById(fieldId);
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Voice input is not supported on your browser.");
+        micButton.style.display = "none"; // Hide mic button if not supported
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    micButton.addEventListener("click", () => {
+        micButton.src = "microphone2.svg"; // Change mic icon
+        speak(promptMessage, () => {
+            recognition.start();
+        });
+    });
+
+    recognition.onresult = (event) => {
+        let transcript = event.results[0][0].transcript.trim();
+        inputField.value = transcript;
+    };
+
+    recognition.onend = () => {
+        micButton.src = "microphone.svg"; // Revert mic icon
+    };
+
+    recognition.onerror = (event) => {
+        alert(`Error: ${event.error}`);
+        micButton.src = "microphone.svg"; // Ensure icon resets on error
+    };
+}
 function initResetPasswordForm() {
     document.getElementById('reset-password-form').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -1456,31 +2837,6 @@ function initResetPasswordForm() {
         }
     });
 }
-async function sendResetEmail() {
-    const emailData = {
-      to: 'recipient@example.com',  // The recipient email
-      from: 'your-email@example.com',  // Your email address (must be verified in Mailjet)
-      subject: 'Password Reset Request',
-      text: 'Click here to reset your password: <reset-link>',  // Update with the actual reset link
-    };
-  
-    try {
-      const response = await fetch('/send-email', {  // Your server endpoint
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailData),
-      });
-  
-      if (response.ok) {
-        console.log('Email sent successfully');
-      } else {
-        console.error('Failed to send email');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
+
 // Initial page load
 showLoginPage();
