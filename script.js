@@ -1203,8 +1203,8 @@ function initImagesAndCurrrentInfoGeneration(){
     let submitbtn = document.querySelector("#submit"); 
     let chatContainer = document.querySelector(".chat-container");
     // Your Google API Key and Custom Search Engine ID
-const GOOGLE_API_KEY = "AIzaSyDGYBnfkVGjAXwmi0ty7nZ4Uy7_T1fy1ZU"; // Replace with your Google API Key
-const SEARCH_ENGINE_ID = "707d978d3dc704f69"; // Replace with your Custom Search Engine ID
+const GOOGLE_API_KEY = "Your_Google_API_key"; // Replace with your Google API Key
+const SEARCH_ENGINE_ID = "Your_Search_Engine_ID"; // Replace with your Custom Search Engine ID
     
 const APIs = {
     weather: "https://api.openweathermap.org/data/2.5/weather?q=", // Weather API
